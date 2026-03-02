@@ -421,3 +421,67 @@
     animation: none;
   }
 }
+
+@media (max-width: 1024px) {
+  .contact-hero {
+    min-height: 58vh;
+    padding-top: clamp(88px, 11vh, 114px);
+    padding-bottom: clamp(72px, 10vh, 96px);
+  }
+
+  .contact-hero__content {
+    max-width: 840px;
+  }
+
+  .contact-form-section {
+    padding: 72px 0 82px;
+  }
+
+  .contact-form-section__container,
+  .office-map-section__container {
+    padding: 0 20px;
+  }
+
+  .contact-form-card {
+    padding: 22px 20px;
+  }
+
+  .office-map-section {
+    padding: 68px 0 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-hero h1 {
+    line-height: 1.16;
+  }
+
+  .contact-scroll-indicator {
+    margin-top: 26px;
+  }
+
+  .contact-form-card {
+    border-radius: 16px;
+  }
+
+  .field-input {
+    border-radius: 11px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contact-form-visual__tag {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .office-map-frame {
+    border-radius: 16px;
+  }
+}

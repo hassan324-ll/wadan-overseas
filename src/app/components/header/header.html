@@ -32,11 +32,21 @@
         />
       </a>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a class="active" href="/">HOME</a>
-        <a href="/about-us">ABOUT US</a>
-        <a href="/services">SERVICES</a>
-        <a href="/contact-us">CONTACT US</a>
+      <button
+        class="menu-toggle"
+        type="button"
+        [attr.aria-expanded]="menuOpen"
+        aria-label="Toggle navigation menu"
+        (click)="toggleMenu()"
+      >
+        <i class="fa-solid" [class.fa-bars]="!menuOpen" [class.fa-xmark]="menuOpen" aria-hidden="true"></i>
+      </button>
+
+      <nav class="nav-links" [class.open]="menuOpen" aria-label="Main navigation">
+        <a class="active" href="/" (click)="closeMenu()">HOME</a>
+        <a href="/about-us" (click)="closeMenu()">ABOUT US</a>
+        <a href="/services" (click)="closeMenu()">SERVICES</a>
+        <a href="/contact-us" (click)="closeMenu()">CONTACT US</a>
       </nav>
     </div>
   </div>

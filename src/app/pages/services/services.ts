@@ -12,6 +12,9 @@ export class Services implements AfterViewInit, OnDestroy {
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
   ngAfterViewInit(): void {
+    // Fail-safe: never keep content hidden if observer timing fails on any device.
+    this.revealElementsImmediately();
+
     this.initializeRevealAnimations();
   }
 

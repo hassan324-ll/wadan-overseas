@@ -548,3 +548,88 @@
     animation: none;
   }
 }
+
+@media (max-width: 1024px) {
+  .about-hero {
+    min-height: 58vh;
+    padding-top: clamp(86px, 11vh, 112px);
+    padding-bottom: clamp(72px, 10vh, 96px);
+  }
+
+  .about-hero__content {
+    max-width: 840px;
+  }
+
+  .who-we-are {
+    padding: 72px 0 80px;
+  }
+
+  .who-we-are__container,
+  .about-countries__container,
+  .about-team__container {
+    padding: 0 20px;
+  }
+
+  .who-we-are__container {
+    gap: 24px;
+  }
+
+  .who-we-are__image {
+    min-height: 320px;
+  }
+
+  .about-countries {
+    padding: 72px 0 82px;
+  }
+
+  .about-countries__head {
+    margin-bottom: 22px;
+  }
+
+  .about-team {
+    padding: 74px 0 84px;
+  }
+
+  .about-team__head {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-hero {
+    min-height: 52vh;
+  }
+
+  .about-hero h1 {
+    line-height: 1.18;
+  }
+
+  .scroll-indicator {
+    margin-top: 26px;
+  }
+
+  .who-we-are__highlights li {
+    align-items: flex-start;
+  }
+
+  .who-we-are__badge {
+    position: static;
+    display: inline-flex;
+    margin-top: 12px;
+  }
+
+  .about-country-card,
+  .team-card {
+    border-radius: 14px;
+  }
+
+  .team-card__photo {
+    width: 96px;
+    height: 96px;
+  }
+
+  .about-team__cta a {
+    width: 100%;
+    max-width: 340px;
+  }
+}

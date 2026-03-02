@@ -155,3 +155,59 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 1024px) {
+  .footer-main {
+    padding: 54px 0 30px;
+  }
+
+  .footer-container {
+    padding: 0 20px;
+  }
+
+  .footer-grid {
+    gap: 24px 26px;
+  }
+
+  .company-col p {
+    max-width: 100%;
+  }
+
+  .footer-col h4 {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-logo {
+    height: 50px;
+  }
+
+  .footer-col a,
+  .footer-col p {
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  .social-links {
+    margin-top: 12px;
+  }
+
+  .social-links a {
+    width: 32px;
+    height: 32px;
+  }
+
+  .footer-bottom {
+    padding: 12px 0 14px;
+  }
+
+  .footer-bottom-content {
+    gap: 8px;
+  }
+
+  .policy-links {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+}

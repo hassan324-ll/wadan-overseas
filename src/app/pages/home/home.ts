@@ -52,6 +52,9 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    // Fail-safe: never keep content hidden if observer timing fails on any device.
+    this.revealElementsImmediately();
+
     this.initializeRevealAnimations();
   }
 

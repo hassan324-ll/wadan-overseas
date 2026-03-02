@@ -1083,3 +1083,99 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .services-preview {
+    padding: 64px 0 72px;
+  }
+
+  .countries-serve {
+    padding: 64px 0 76px;
+  }
+
+  .why-choose {
+    padding: 68px 0 80px;
+  }
+
+  .how-it-works {
+    padding: 68px 0 78px;
+  }
+
+  .testimonial-slider {
+    padding: 70px 0 82px;
+  }
+
+  .final-cta {
+    padding: 76px 0 86px;
+  }
+
+  .services-preview__container,
+  .countries-serve__container,
+  .why-choose__container,
+  .how-it-works__container,
+  .testimonial-slider__container,
+  .final-cta__container {
+    padding: 0 20px;
+  }
+
+  .countries-serve__board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .testimonial-card {
+    padding: 24px 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .travel-content {
+    max-width: 100%;
+  }
+
+  .travel-content p {
+    max-width: 100%;
+  }
+
+  .services-preview__heading,
+  .countries-serve__intro,
+  .why-choose__intro,
+  .how-it-works__intro,
+  .testimonial-slider__head {
+    margin-bottom: 20px;
+  }
+
+  .service-card,
+  .country-card,
+  .trust-card {
+    border-radius: 14px;
+  }
+
+  .how-it-works__timeline li {
+    gap: 12px;
+  }
+
+  .step-no {
+    width: 42px;
+    height: 42px;
+  }
+
+  .step-content {
+    min-height: 60px;
+    padding: 0 14px;
+  }
+
+  .testimonial-slider__controls {
+    gap: 12px;
+  }
+
+  .final-cta__actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .final-cta__btn {
+    width: 100%;
+  }
+}
