@@ -1,0 +1,35 @@
+<div class="carousel-container">
+  <div
+    class="carousel-track"
+    [class.no-transition]="!transitionEnabled"
+    [style.transform]="getTrackTransform()"
+    (transitionend)="onTrackTransitionEnd()"
+  >
+    <ng-container *ngFor="let feature of displaySlides; let i = index">
+      <div
+        class="feature-slide position-relative d-flex align-items-center slide-bg"
+        [class.active]="i === trackIndex"
+        [style.background-image]="getSlideBackground(feature.bgImage)"
+      >
+        <div class="container position-relative h-100">
+          <div class="slide-content text-white">
+            <h1 class="display-5 fw-bold">{{ feature.title }}</h1>
+            <h4 class="h6 text-white-75">{{ feature.subtitle }}</h4>
+            <p class="lead text-white">{{ feature.bio }}</p>
+            <a class="slide-btn" href="#">Learn More</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="progress-bar-group align-content">
+    <div
+      *ngFor="let feature of features; let i = index"
+      class="progress-bar-wrapper"
+      [class.active]="i === activeIndex"
+    >
+      <div class="progress-bar" [style.width.%]="progressValues[i]"></div>
+    </div>
+  </div>
+</div>
