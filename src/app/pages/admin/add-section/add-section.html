@@ -1,0 +1,163 @@
+<section class="builder-grid">
+  <article class="builder-card">
+    <h2>Add New Section</h2>
+    <p>Configure the section content and preview the design before saving.</p>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        Section Key
+        <input type="text" formControlName="key" placeholder="example: visa-help" />
+      </label>
+
+      <label>
+        Target Page
+        <select formControlName="targetPage">
+          <option value="home">Home</option>
+          <option value="about-us">About Us</option>
+          <option value="services">Services</option>
+          <option value="contact-us">Contact Us</option>
+        </select>
+      </label>
+
+      <label>
+        Section Type
+        <select formControlName="sectionType">
+          <option value="banner">Banner Section</option>
+          <option value="cards">Cards Section</option>
+        </select>
+      </label>
+
+      <label *ngIf="isHomeTarget">
+        Home Placement
+        <select formControlName="homePlacement">
+          <option *ngFor="let item of homePlacementOptions" [value]="item.value">{{ item.label }}</option>
+        </select>
+      </label>
+
+      <label>
+        Background Image URL
+        <input type="text" formControlName="backgroundImageUrl" placeholder="/sliderimg2.avif" />
+      </label>
+
+      <label>
+        Heading 1 (H1)
+        <input type="text" formControlName="heading1" />
+      </label>
+
+      <label>
+        Heading 2 (H2)
+        <input type="text" formControlName="heading2" />
+      </label>
+
+      <label>
+        Paragraph
+        <textarea rows="4" formControlName="paragraph"></textarea>
+      </label>
+
+      <label>
+        Button Text
+        <input type="text" formControlName="buttonText" />
+      </label>
+
+      <label>
+        Button Link
+        <input type="text" formControlName="buttonLink" placeholder="/contact-us or https://..." />
+      </label>
+
+      <label>
+        Button Icon Class
+        <input type="text" formControlName="buttonIcon" placeholder="fa-solid fa-paper-plane" />
+      </label>
+
+      <ng-container *ngIf="isCardsSection">
+        <label>
+          Cards Per Row
+          <select formControlName="cardsPerRow">
+            <option [ngValue]="3">3 Cards Per Row</option>
+            <option [ngValue]="4">4 Cards Per Row</option>
+          </select>
+        </label>
+
+        <div formArrayName="cards">
+          <section class="card-builder" *ngFor="let cardControl of cards.controls; let i = index" [formGroupName]="i">
+            <h4>Card {{ i + 1 }}</h4>
+            <label>
+              Card Title
+              <input type="text" formControlName="title" />
+            </label>
+            <label>
+              Card Subtitle
+              <input type="text" formControlName="subtitle" />
+            </label>
+            <label>
+              Card Description
+              <textarea rows="3" formControlName="description"></textarea>
+            </label>
+            <label>
+              Icon Class
+              <input type="text" formControlName="icon" />
+            </label>
+            <label>
+              Button Text
+              <input type="text" formControlName="buttonText" />
+            </label>
+            <label>
+              Button Link
+              <input type="text" formControlName="buttonLink" />
+            </label>
+            <label>
+              Card Background URL
+              <input type="text" formControlName="backgroundImageUrl" />
+            </label>
+          </section>
+        </div>
+      </ng-container>
+
+      <div class="actions">
+        <button type="button" class="secondary" (click)="goToDashboard()">Back</button>
+        <button type="submit" [disabled]="loading">{{ loading ? 'Saving...' : 'Save Section' }}</button>
+      </div>
+    </form>
+
+    <p class="msg" *ngIf="message">{{ message }}</p>
+  </article>
+
+  <article class="preview-card">
+    <h3>Live Preview</h3>
+    <section
+      *ngIf="preview.sectionType === 'banner'; else cardsPreview"
+      class="preview-hero"
+      [style.background-image]="'linear-gradient(110deg, rgba(8, 27, 66, 0.78) 0%, rgba(8, 27, 66, 0.62) 55%, rgba(8, 27, 66, 0.84) 100%), url(' + preview.backgroundImageUrl + ')'"
+    >
+      <div class="preview-content">
+        <h1>{{ preview.heading1 }}</h1>
+        <h2 *ngIf="preview.heading2">{{ preview.heading2 }}</h2>
+        <p>{{ preview.paragraph }}</p>
+        <a class="preview-btn" [href]="preview.buttonLink" target="_blank" rel="noopener noreferrer">
+          <i [class]="preview.buttonIcon" aria-hidden="true"></i>
+          {{ preview.buttonText }}
+        </a>
+      </div>
+    </section>
+
+    <ng-template #cardsPreview>
+      <section class="preview-cards">
+        <div class="preview-cards__head">
+          <h2>{{ preview.heading1 }}</h2>
+          <h3 *ngIf="preview.heading2">{{ preview.heading2 }}</h3>
+          <p>{{ preview.paragraph }}</p>
+        </div>
+
+        <div class="preview-cards__grid" [style.grid-template-columns]="'repeat(' + preview.cardsPerRow + ', minmax(0, 1fr))'">
+          <article class="preview-card-item" *ngFor="let card of preview.cards">
+            <div class="preview-card-item__icon"><i [class]="card.icon || 'fa-solid fa-star'"></i></div>
+            <h4>{{ card.title }}</h4>
+            <h5 *ngIf="card.subtitle">{{ card.subtitle }}</h5>
+            <p>{{ card.description }}</p>
+            <a href="#" (click)="$event.preventDefault()">{{ card.buttonText || 'Learn More' }}</a>
+          </article>
+        </div>
+      </section>
+    </ng-template>
+  </article>
+</section>

@@ -1,15 +1,40 @@
-import { AfterViewInit, Component, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { CustomSections } from '../../components/custom-sections/custom-sections';
+import { CustomSection, FirestoreService } from '../../services/firestore.service';
 
 @Component({
   selector: 'app-about-us',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, CustomSections],
   templateUrl: './about-us.html',
   styleUrl: './about-us.css',
 })
 export class AboutUs implements AfterViewInit, OnDestroy {
+  private readonly firestoreService = inject(FirestoreService);
   revealObserver: IntersectionObserver | null = null;
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
+  readonly aboutContent$ = this.firestoreService.getAboutPage().pipe(
+    map((data) => {
+      const defaults = this.firestoreService.getDefaultAboutPage();
+      if (!data) {
+        return defaults;
+      }
+      return {
+        ...defaults,
+        ...data,
+        teamMembers: data.teamMembers?.length ? data.teamMembers : defaults.teamMembers,
+      };
+    }),
+    catchError(() => of(this.firestoreService.getDefaultAboutPage()))
+  );
+  readonly customSections$ = this.firestoreService.getCustomSections().pipe(
+    map((sections) => sections.filter((section) => section.targetPage === 'about-us')),
+    catchError(() => of([] as CustomSection[]))
+  );
 
   ngAfterViewInit(): void {
     // Fail-safe: never keep content hidden if observer timing fails on any device.

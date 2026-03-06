@@ -1,0 +1,47 @@
+<section class="edit-card">
+  <h2>Edit Contact Page</h2>
+  <p>Manage full Contact page content.</p>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Hero Title
+      <input type="text" formControlName="heroTitle" />
+    </label>
+
+    <label>
+      Hero Subtitle
+      <input type="text" formControlName="heroSubtitle" />
+    </label>
+
+    <label>
+      Form Section Title
+      <input type="text" formControlName="formTitle" />
+    </label>
+
+    <label>
+      Form Section Subtitle
+      <textarea rows="4" formControlName="formSubtitle"></textarea>
+    </label>
+
+    <label>
+      Visit Section Title
+      <input type="text" formControlName="visitTitle" />
+    </label>
+
+    <label>
+      Visit Section Description
+      <textarea rows="5" formControlName="visitDescription"></textarea>
+    </label>
+
+    <label>
+      Google Map Query
+      <input type="text" formControlName="mapQuery" />
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">{{ loading ? 'Saving...' : 'Save' }}</button>
+    </div>
+  </form>
+
+  <p class="msg" *ngIf="message">{{ message }}</p>
+</section>

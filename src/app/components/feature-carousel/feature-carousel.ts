@@ -28,7 +28,7 @@ export class FeatureCarousel implements OnInit, OnDestroy {
       id: '1',
       title: 'Your Gateway to Global Careers',
       subtitle: 'Trusted Overseas Employment & Visa Services',
-      bio: 'At Wadaan Employment Promoters, we connect talented professionals with rewarding international job opportunities. From documentation to visa processing, we ensure a smooth and hassle-free journey toward your dream career abroad.',
+      bio: 'At WADAN Employment Promoters, we connect talented professionals with rewarding international job opportunities. From documentation to visa processing, we ensure a smooth and hassle-free journey toward your dream career abroad.',
       bgImage: './sliderimg.avif',
     },
     {
@@ -42,7 +42,7 @@ export class FeatureCarousel implements OnInit, OnDestroy {
       id: '3',
       title: 'Building Futures Beyond Borders',
       subtitle: 'End-to-End International Recruitment Solutions',
-      bio: 'Wadaan Employment Promoters offers comprehensive support for professionals seeking international employment. We handle everything from job matching and visa applications to travel arrangements, ensuring a seamless transition to work abroad.',
+      bio: 'WADAN Employment Promoters offers comprehensive support for professionals seeking international employment. We handle everything from job matching and visa applications to travel arrangements, ensuring a seamless transition to work abroad.',
       bgImage: '/./sliderimg3.avif',
     },
   ];

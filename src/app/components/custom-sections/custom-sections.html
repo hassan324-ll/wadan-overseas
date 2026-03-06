@@ -1,0 +1,57 @@
+<section class="custom-sections" *ngIf="renderedSections.length > 0">
+  <ng-container *ngFor="let section of renderedSections">
+    <article
+      class="custom-section-banner animate-fade-up"
+      *ngIf="(section.sectionType ?? 'banner') === 'banner'"
+      [style.background-image]="'linear-gradient(110deg, rgba(8, 27, 66, 0.78) 0%, rgba(8, 27, 66, 0.62) 55%, rgba(8, 27, 66, 0.84) 100%), url(' + (section.backgroundImageUrl || '/sliderimg2.avif') + ')'"
+    >
+      <div class="custom-section-banner__content">
+        <h1>{{ section.heading1 || section.title }}</h1>
+        <h2 *ngIf="section.heading2 || section.subtitle">{{ section.heading2 || section.subtitle }}</h2>
+        <p>{{ section.paragraph || section.description }}</p>
+        <a
+          class="custom-section-btn"
+          [href]="section.buttonLink || '/contact-us'"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i [class]="section.buttonIcon || 'fa-solid fa-paper-plane'" aria-hidden="true"></i>
+          {{ section.buttonText || 'Learn More' }}
+        </a>
+      </div>
+    </article>
+
+    <article class="custom-section-cards animate-fade-up" *ngIf="section.sectionType === 'cards'">
+      <div class="custom-section-cards__head">
+        <h2>{{ section.heading1 || section.title }}</h2>
+        <h3 *ngIf="section.heading2 || section.subtitle">{{ section.heading2 || section.subtitle }}</h3>
+        <p>{{ section.paragraph || section.description }}</p>
+      </div>
+
+      <div class="custom-section-cards__grid" [style.grid-template-columns]="getGridColumns(section)">
+        <article
+          class="custom-section-card"
+          *ngFor="let card of section.cards"
+          [style.background-image]="card.backgroundImageUrl ? 'linear-gradient(155deg, rgba(16, 48, 102, 0.86) 0%, rgba(15, 66, 138, 0.72) 100%), url(' + card.backgroundImageUrl + ')' : ''"
+        >
+          <div class="custom-section-card__icon">
+            <i [class]="card.icon || 'fa-solid fa-star'" aria-hidden="true"></i>
+          </div>
+          <h4>{{ card.title }}</h4>
+          <h5 *ngIf="card.subtitle">{{ card.subtitle }}</h5>
+          <p>{{ card.description }}</p>
+          <a
+            class="custom-section-card__link"
+            *ngIf="card.buttonText"
+            [href]="card.buttonLink || '/contact-us'"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {{ card.buttonText }}
+          </a>
+        </article>
+      </div>
+    </article>
+  </ng-container>
+</section>
+

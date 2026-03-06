@@ -1,0 +1,60 @@
+<section class="edit-card">
+  <h2>Edit Country Info</h2>
+  <p>Manage country details used on the country information pages.</p>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <h3>Section Header</h3>
+    <label>
+      Title
+      <input type="text" formControlName="title" />
+    </label>
+    <label>
+      Subtitle
+      <textarea rows="3" formControlName="subtitle"></textarea>
+    </label>
+
+    <div formArrayName="countries">
+      <section class="country-block" *ngFor="let countryControl of countries.controls; let i = index" [formGroupName]="i">
+        <h3>Country {{ i + 1 }}</h3>
+        <label>
+          Slug
+          <input type="text" formControlName="slug" />
+        </label>
+        <label>
+          Name
+          <input type="text" formControlName="name" />
+        </label>
+        <label>
+          Flag (HTML entity)
+          <input type="text" formControlName="flag" />
+        </label>
+        <label>
+          Hero Image URL
+          <input type="text" formControlName="heroImage" />
+        </label>
+        <label>
+          Intro
+          <textarea rows="4" formControlName="intro"></textarea>
+        </label>
+        <label>
+          Key Sectors
+          <textarea rows="3" formControlName="sectors"></textarea>
+        </label>
+        <label>
+          Our Support
+          <textarea rows="3" formControlName="support"></textarea>
+        </label>
+        <label>
+          Candidate Guidance
+          <textarea rows="3" formControlName="guidance"></textarea>
+        </label>
+      </section>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">{{ loading ? 'Saving...' : 'Save All' }}</button>
+    </div>
+  </form>
+
+  <p class="msg" *ngIf="message">{{ message }}</p>
+</section>

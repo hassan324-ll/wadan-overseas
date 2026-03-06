@@ -1,0 +1,23 @@
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <h2><i class="fa-solid fa-layer-group"></i> WADAN Admin</h2>
+    <a routerLink="/admin/add-section" routerLinkActive="active"><i class="fa-solid fa-square-plus"></i> Add New Section</a>
+    <a routerLink="/admin/dashboard" routerLinkActive="active"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+    <a routerLink="/admin/edit-home" routerLinkActive="active"><i class="fa-solid fa-house"></i> Edit Home</a>
+    <a routerLink="/admin/edit-about" routerLinkActive="active"><i class="fa-solid fa-circle-info"></i> Edit About</a>
+    <a routerLink="/admin/edit-services" routerLinkActive="active"><i class="fa-solid fa-briefcase"></i> Edit Services</a>
+    <a routerLink="/admin/edit-contact" routerLinkActive="active"><i class="fa-solid fa-address-book"></i> Edit Contact</a>
+    <a routerLink="/admin/edit-country-info" routerLinkActive="active"><i class="fa-solid fa-earth-asia"></i> Edit Country Info</a>
+  </aside>
+
+  <main class="admin-main">
+    <header class="admin-header">
+      <h1><i class="fa-solid fa-screwdriver-wrench"></i> Content Dashboard</h1>
+      <button type="button" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </header>
+
+    <section class="admin-content">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

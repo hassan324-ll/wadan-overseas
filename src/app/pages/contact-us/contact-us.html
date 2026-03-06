@@ -2,8 +2,8 @@
   <div class="contact-hero__overlay"></div>
 
   <div class="contact-hero__content">
-    <h1>Get in Touch with Us</h1>
-    <p>We&rsquo;re Here to Assist You With Your Overseas Career</p>
+    <h1>{{ contactContent.heroTitle }}</h1>
+    <p>{{ contactContent.heroSubtitle }}</p>
 
     <div class="contact-scroll-indicator" aria-hidden="true">
       <span></span>
@@ -15,8 +15,8 @@
   <div class="contact-form-section__container">
     <div class="contact-form-card">
       <div class="contact-form-card__head">
-        <h2>Send Us a Message</h2>
-        <p>Share your details and our team will guide you for overseas job and visa solutions.</p>
+        <h2>{{ contactContent.formTitle }}</h2>
+        <p>{{ contactContent.formSubtitle }}</p>
       </div>
 
       <form #contactForm="ngForm" (ngSubmit)="submitInquiry(contactForm)" novalidate>
@@ -127,11 +127,8 @@
 <section class="office-map-section" aria-label="Our office location">
   <div class="office-map-section__container">
     <div class="office-map-section__head">
-      <h2>Visit Us</h2>
-      <p>
-        Our Office Location: Muqam Chowk, Mardan, Pakistan. You are always welcome to visit us or
-        contact our team for trusted guidance on overseas jobs and visa services.
-      </p>
+      <h2>{{ contactContent.visitTitle }}</h2>
+      <p>{{ contactContent.visitDescription }}</p>
     </div>
 
     <div class="office-map-frame">
@@ -139,11 +136,12 @@
         <i class="fa-solid fa-location-dot"></i>
       </div>
       <iframe
-        title="Wadaan Employment Promoters office location"
+        title="WADAN Employment Promoters office location"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps?q=Muqam+Chowk+Mardan+Pakistan&output=embed"
+        [src]="safeMapUrl"
       ></iframe>
     </div>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" *ngIf="customSections$ | async as customSections"></app-custom-sections>

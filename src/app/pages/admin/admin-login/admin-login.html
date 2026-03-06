@@ -1,0 +1,21 @@
+<section class="admin-login">
+  <div class="admin-login__card">
+    <h1>Admin Login</h1>
+    <p>Sign in to manage website content.</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label>
+        Email
+        <input type="email" formControlName="email" placeholder="admin@email.com" />
+      </label>
+
+      <label>
+        Password
+        <input type="password" formControlName="password" placeholder="******" />
+      </label>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <button type="submit" [disabled]="loading">{{ loading ? 'Signing in...' : 'Login' }}</button>
+    </form>
+  </div>
+</section>

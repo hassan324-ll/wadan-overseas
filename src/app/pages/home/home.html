@@ -1,22 +1,26 @@
 <app-feature-carousel></app-feature-carousel>
+<ng-container *ngIf="homeSections$ | async as homeSections">
+<ng-container *ngIf="customSections$ | async as customSections">
+<app-custom-sections [sections]="customSections" placement="top"></app-custom-sections>
 
-<section class="travel-highlight animate-fade-up is-visible" aria-label="Alsaadah travel intro">
+<section
+  class="travel-highlight animate-fade-up is-visible"
+  aria-label="Alsaadah travel intro"
+  [style.background-image]="'linear-gradient(100deg, rgba(248, 248, 250, 0.95) 0%, rgba(248, 248, 250, 0.87) 48%, rgba(248, 248, 250, 0.94) 100%), url(' + (homeSections.hero.imageUrl || '/sliderimg2.avif') + ')'"
+>
   <div class="travel-overlay"></div>
 
   <div class="travel-container">
     <div class="travel-visual" aria-hidden="true">
       <div class="visual-circle"></div>
-      <div class="visual-image"></div>
+      <div class="visual-image" [style.background-image]="'url(' + (homeSections.hero.secondaryImageUrl || '/travel.png') + ')'"></div>
     </div>
 
     <div class="travel-content">
-      <h2>Wadaan Overseas Employment Promoters</h2>
+      <h2>{{ homeSections.hero.title }}</h2>
       <p>
-        Wadaan Overseas Employment Promoters is a trusted overseas recruitment and visa consultancy service
-        dedicated to connecting skilled professionals with global employment opportunities. We
-        specialize in facilitating work visas and guiding individuals through every step of the
-        international employment process &mdash; from job placement and documentation to visa
-        application and travel arrangements.
+        <strong>{{ homeSections.hero.subtitle }}</strong><br />
+        {{ homeSections.hero.description }}
       </p>
 
       <div class="travel-features">
@@ -27,150 +31,141 @@
     </div>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-hero"></app-custom-sections>
 
 <section class="services-preview animate-fade-up" aria-label="Our key services preview">
   <div class="services-preview__container">
     <div class="services-preview__heading">
-      <h3>Our Key Services <span>(Preview Only)</span></h3>
-      <p>Showcasing our main support areas for overseas employment and visa processing.</p>
+      <h3>{{ homeSections.services.title }} <span>({{ homeSections.services.subtitle }})</span></h3>
+      <p>{{ homeSections.services.description }}</p>
     </div>
 
     <div class="services-preview__grid">
       <article class="service-card animate-fade-up animate-delay-1">
         <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
-        <h4>Overseas Job Placement</h4>
+        <h4>{{ homeSections.services.items?.[0] }}</h4>
       </article>
       <article class="service-card animate-fade-up animate-delay-2">
         <i class="fa-solid fa-passport" aria-hidden="true"></i>
-        <h4>Work Visa Processing</h4>
+        <h4>{{ homeSections.services.items?.[1] }}</h4>
       </article>
       <article class="service-card animate-fade-up animate-delay-3">
         <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
-        <h4>Document Assistance</h4>
+        <h4>{{ homeSections.services.items?.[2] }}</h4>
       </article>
       <article class="service-card animate-fade-up animate-delay-4">
         <i class="fa-solid fa-handshake" aria-hidden="true"></i>
-        <h4>Employer Coordination</h4>
+        <h4>{{ homeSections.services.items?.[3] }}</h4>
       </article>
     </div>
 
     <a class="services-preview__btn animate-pop animate-delay-2" href="/services">View All Services</a>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-services"></app-custom-sections>
 
 <section class="countries-serve animate-fade-up" aria-label="Countries we serve">
   <div class="countries-serve__container">
     <div class="countries-serve__intro">
-      <h3>Countries We Serve</h3>
-      <p>
-        We actively support candidates and employers across multiple international destinations.
-      </p>
+      <h3>{{ homeSections.countries.title }}</h3>
+      <p>{{ homeSections.countries.description }}</p>
     </div>
 
     <div class="countries-serve__board">
-      <article class="country-card country-card--gulf country-card--uae animate-fade-up animate-delay-1">
+      <a
+        class="country-card country-card--gulf country-card--uae animate-fade-up animate-delay-1 country-card--link"
+        routerLink="/countries/uae"
+        aria-label="View United Arab Emirates details"
+      >
         <span class="country-flag">&#x1F1E6;&#x1F1EA;</span>
-        <h4>United Arab Emirates</h4>
-      </article>
-      <article class="country-card country-card--gulf country-card--saudi animate-fade-up animate-delay-2">
+        <h4>{{ homeSections.countries.items?.[0] }}</h4>
+      </a>
+      <a
+        class="country-card country-card--gulf country-card--saudi animate-fade-up animate-delay-2 country-card--link"
+        routerLink="/countries/saudi-arabia"
+        aria-label="View Saudi Arabia details"
+      >
         <span class="country-flag">&#x1F1F8;&#x1F1E6;</span>
-        <h4>Saudi Arabia</h4>
-      </article>
-      <article class="country-card country-card--gulf country-card--qatar animate-fade-up animate-delay-3">
+        <h4>{{ homeSections.countries.items?.[1] }}</h4>
+      </a>
+      <a
+        class="country-card country-card--gulf country-card--qatar animate-fade-up animate-delay-3 country-card--link"
+        routerLink="/countries/qatar"
+        aria-label="View Qatar details"
+      >
         <span class="country-flag">&#x1F1F6;&#x1F1E6;</span>
-        <h4>Qatar</h4>
-      </article>
-      <article class="country-card country-card--gulf country-card--oman animate-fade-up animate-delay-1">
+        <h4>{{ homeSections.countries.items?.[2] }}</h4>
+      </a>
+      <a
+        class="country-card country-card--gulf country-card--oman animate-fade-up animate-delay-1 country-card--link"
+        routerLink="/countries/oman"
+        aria-label="View Oman details"
+      >
         <span class="country-flag">&#x1F1F4;&#x1F1F2;</span>
-        <h4>Oman</h4>
-      </article>
-      <article class="country-card country-card--gulf country-card--bahrain animate-fade-up animate-delay-2">
-        <span class="country-flag">&#x1F1F5;&#x1F1F1;</span>
-        <h4>Bahrain</h4>
-      </article>
-      <article class="country-card country-card--gulf country-card--iraq animate-fade-up animate-delay-3">
-        <span class="country-flag">&#x1F1F7;&#x1F1F4;</span>
-        <h4>Iraq</h4>
-      </article>
+        <h4>{{ homeSections.countries.items?.[3] }}</h4>
+      </a>
+      <a
+        class="country-card country-card--gulf country-card--bahrain animate-fade-up animate-delay-2 country-card--link"
+        routerLink="/countries/bahrain"
+        aria-label="View Bahrain details"
+      >
+        <span class="country-flag">&#x1F1E7;&#x1F1ED;</span>
+        <h4>{{ homeSections.countries.items?.[4] }}</h4>
+      </a>
+      <a
+        class="country-card country-card--gulf country-card--iraq animate-fade-up animate-delay-3 country-card--link"
+        routerLink="/countries/iraq"
+        aria-label="View Iraq details"
+      >
+        <span class="country-flag">&#x1F1EE;&#x1F1F6;</span>
+        <h4>{{ homeSections.countries.items?.[5] }}</h4>
+      </a>
     </div>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-countries"></app-custom-sections>
 
 <section class="why-choose animate-fade-up" aria-label="Why choose us">
   <div class="why-choose__container">
     <div class="why-choose__intro">
-      <h3>Why Choose Us</h3>
-      <p>This is why clients trust Wadaan for overseas employment and visa solutions.</p>
+      <h3>{{ homeSections.whyChoose.title }}</h3>
+      <p>{{ homeSections.whyChoose.description }}</p>
     </div>
 
     <div class="why-choose__grid">
-      <article class="trust-card">
+      <article class="trust-card" *ngFor="let item of homeSections.whyChoose.items">
         <span class="trust-card__icon"><i class="fa-solid fa-check"></i></span>
-        <h4>Transparent &amp; Ethical Recruitment</h4>
-      </article>
-      <article class="trust-card">
-        <span class="trust-card__icon"><i class="fa-solid fa-check"></i></span>
-        <h4>Verified International Employers</h4>
-      </article>
-      <article class="trust-card">
-        <span class="trust-card__icon"><i class="fa-solid fa-check"></i></span>
-        <h4>Fast &amp; Secure Visa Processing</h4>
-      </article>
-      <article class="trust-card">
-        <span class="trust-card__icon"><i class="fa-solid fa-check"></i></span>
-        <h4>Complete End-to-End Support</h4>
+        <h4>{{ item }}</h4>
       </article>
     </div>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-why-choose"></app-custom-sections>
 
 <section class="how-it-works animate-fade-up" aria-label="How it works">
   <div class="how-it-works__container">
     <div class="how-it-works__intro">
-      <h3>How It Works</h3>
-      <p>Simple, transparent steps from registration to successful deployment.</p>
+      <h3>{{ homeSections.howItWorks.title }}</h3>
+      <p>{{ homeSections.howItWorks.description }}</p>
     </div>
 
     <ol class="how-it-works__timeline">
-      <li>
-        <span class="step-no">1</span>
+      <li *ngFor="let item of homeSections.howItWorks.items; let i = index">
+        <span class="step-no">{{ i + 1 }}</span>
         <div class="step-content">
-          <h4>Register</h4>
-        </div>
-      </li>
-      <li>
-        <span class="step-no">2</span>
-        <div class="step-content">
-          <h4>Interview</h4>
-        </div>
-      </li>
-      <li>
-        <span class="step-no">3</span>
-        <div class="step-content">
-          <h4>Offer Letter</h4>
-        </div>
-      </li>
-      <li>
-        <span class="step-no">4</span>
-        <div class="step-content">
-          <h4>Visa Processing</h4>
-        </div>
-      </li>
-      <li>
-        <span class="step-no">5</span>
-        <div class="step-content">
-          <h4>Travel &amp; Deployment</h4>
+          <h4>{{ item }}</h4>
         </div>
       </li>
     </ol>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-how-it-works"></app-custom-sections>
 
 <section class="testimonial-slider animate-fade-up" aria-label="Client testimonials">
   <div class="testimonial-slider__container">
     <div class="testimonial-slider__head">
-      <h3>What Our Clients Say</h3>
-      <p>Real experiences from candidates we placed across international employers.</p>
+      <h3>{{ homeSections.testimonials.title }}</h3>
+      <p>{{ homeSections.testimonials.description }}</p>
     </div>
 
     <div class="testimonial-slider__viewport">
@@ -213,22 +208,22 @@
     </div>
   </div>
 </section>
+<app-custom-sections [sections]="customSections" placement="after-testimonials"></app-custom-sections>
 
 <section class="final-cta animate-fade-up" aria-label="Final call to action">
   <div class="final-cta__container">
-    <h3>Ready to Work Abroad?</h3>
-    <p>
-      Start your international career journey today with trusted guidance for overseas employment
-      and work visa processing.
-    </p>
+    <h3>{{ homeSections.finalCta.title }}</h3>
+    <p>{{ homeSections.finalCta.description }}</p>
 
     <div class="final-cta__actions">
-      <a class="final-cta__btn final-cta__btn--primary" href="/contact-us">Apply Now</a>
-      <a class="final-cta__btn final-cta__btn--secondary" href="/contact-us">Contact Our Team Today</a>
+      <a class="final-cta__btn final-cta__btn--primary" href="/contact-us">{{ homeSections.finalCta.primaryButtonText }}</a>
+      <a class="final-cta__btn final-cta__btn--secondary" href="/contact-us">{{ homeSections.finalCta.secondaryButtonText }}</a>
     </div>
 
-    <span class="final-cta__trust">100% Transparent Process | Verified International Employers</span>
+    <span class="final-cta__trust">{{ homeSections.finalCta.trustText }}</span>
   </div>
 </section>
-
-
+<app-custom-sections [sections]="customSections" placement="after-final-cta"></app-custom-sections>
+<app-custom-sections [sections]="customSections" placement="bottom"></app-custom-sections>
+</ng-container>
+</ng-container>

@@ -1,5 +1,5 @@
 {
-  "name": "wadaan",
+  "name": "WADAN",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -25,10 +25,13 @@
     "@angular/common": "^20.3.0",
     "@angular/compiler": "^20.3.0",
     "@angular/core": "^20.3.0",
+    "@angular/fire": "^20.0.1",
     "@angular/forms": "^20.3.0",
+    "@angular/platform-browser-dynamic": "20.3.16",
     "@angular/platform-browser": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@fortawesome/fontawesome-free": "^7.2.0",
+    "firebase": "^11.10.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

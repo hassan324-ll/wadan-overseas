@@ -1,0 +1,48 @@
+<ng-container *ngIf="selectedCountry as country; else notFound">
+  <section
+    class="country-hero animate-fade-up is-visible"
+    aria-label="Country employment opportunities"
+    [style.background-image]="getHeroBackground(country)"
+  >
+    <div class="country-hero__overlay"></div>
+    <div class="country-hero__content">
+      <span class="country-flag" aria-hidden="true" [innerHTML]="country.flag"></span>
+      <h1>{{ country.name }}</h1>
+      <p>Country information for overseas employment opportunities and visa workflow support.</p>
+    </div>
+  </section>
+
+  <section class="country-info animate-fade-up" aria-label="Country details">
+    <div class="country-info__container">
+      <h2>{{ country.name }} Info</h2>
+      <p>{{ country.intro }}</p>
+
+      <div class="country-info__grid">
+        <article class="country-info-card animate-fade-up animate-delay-1">
+          <h3>Key Sectors</h3>
+          <p>{{ country.sectors }}</p>
+        </article>
+        <article class="country-info-card animate-fade-up animate-delay-2">
+          <h3>Our Support</h3>
+          <p>{{ country.support }}</p>
+        </article>
+        <article class="country-info-card animate-fade-up animate-delay-3">
+          <h3>Candidate Guidance</h3>
+          <p>{{ country.guidance }}</p>
+        </article>
+      </div>
+
+      <a class="country-info__back animate-pop animate-delay-4" routerLink="/home">Back to Countries</a>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #notFound>
+  <section class="country-not-found animate-fade-up is-visible" aria-label="Country info not found">
+    <div class="country-not-found__container">
+      <h2>Country Info Not Found</h2>
+      <p>The selected country is not available right now. Please choose from the Countries We Serve section.</p>
+      <a class="country-info__back" routerLink="/home">Go to Home</a>
+    </div>
+  </section>
+</ng-template>

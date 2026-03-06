@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { FeatureCarousel } from "../../components/feature-carousel/feature-carousel";
+import { CustomSections } from '../../components/custom-sections/custom-sections';
+import { CustomSection, FirestoreService } from '../../services/firestore.service';
+import { map } from 'rxjs/operators';
 
 type Testimonial = {
   name: string;
@@ -13,22 +19,30 @@ type Testimonial = {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FeatureCarousel],
+  imports: [CommonModule, RouterLink, FeatureCarousel, CustomSections],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit, AfterViewInit, OnDestroy {
+  private readonly firestoreService = inject(FirestoreService);
   activeTestimonial = 0;
   testimonialTimer: ReturnType<typeof setInterval> | null = null;
   revealObserver: IntersectionObserver | null = null;
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
+  readonly homeSections$ = this.firestoreService.getHomeSections().pipe(
+    catchError(() => of(this.firestoreService.getDefaultHomeSections()))
+  );
+  readonly customSections$ = this.firestoreService.getCustomSections().pipe(
+    map((sections) => sections.filter((section) => (section.targetPage ?? 'home') === 'home')),
+    catchError(() => of([] as CustomSection[]))
+  );
 
   testimonials: Testimonial[] = [
     {
       name: 'Ahmed Khan',
       profession: 'Mechanical Technician',
       country: 'Saudi Arabia',
-      quote: 'Wadaan guided me from interview to visa approval with total transparency.',
+      quote: 'WADAN guided me from interview to visa approval with total transparency.',
       photo: '/travel.png',
     },
     {

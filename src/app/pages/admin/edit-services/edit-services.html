@@ -1,0 +1,82 @@
+<section class="edit-card">
+  <h2>Edit Services</h2>
+  <p>Manage full Services page content and all service cards.</p>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <h3>Hero Section</h3>
+    <label>
+      Hero Title
+      <input type="text" formControlName="heroTitle" />
+    </label>
+    <label>
+      Hero Subtitle
+      <textarea rows="3" formControlName="heroSubtitle"></textarea>
+    </label>
+
+    <h3>Grid Heading</h3>
+    <label>
+      Grid Title
+      <input type="text" formControlName="gridTitle" />
+    </label>
+    <label>
+      Grid Subtitle
+      <textarea rows="3" formControlName="gridSubtitle"></textarea>
+    </label>
+
+    <h3>Service 1</h3>
+    <label>
+      Title
+      <input type="text" formControlName="card1Title" />
+    </label>
+    <label>
+      Description
+      <textarea rows="3" formControlName="card1Description"></textarea>
+    </label>
+
+    <h3>Service 2</h3>
+    <label>
+      Title
+      <input type="text" formControlName="card2Title" />
+    </label>
+    <label>
+      Description
+      <textarea rows="3" formControlName="card2Description"></textarea>
+    </label>
+
+    <h3>Service 3</h3>
+    <label>
+      Title
+      <input type="text" formControlName="card3Title" />
+    </label>
+    <label>
+      Description
+      <textarea rows="3" formControlName="card3Description"></textarea>
+    </label>
+
+    <h3>Service 4</h3>
+    <label>
+      Title
+      <input type="text" formControlName="card4Title" />
+    </label>
+    <label>
+      Description
+      <textarea rows="3" formControlName="card4Description"></textarea>
+    </label>
+
+    <h3>Service 5</h3>
+    <label>
+      Title
+      <input type="text" formControlName="card5Title" />
+    </label>
+    <label>
+      Description
+      <textarea rows="3" formControlName="card5Description"></textarea>
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">{{ loading ? 'Saving...' : 'Save All' }}</button>
+    </div>
+  </form>
+
+  <p class="msg" *ngIf="message">{{ message }}</p>
+</section>

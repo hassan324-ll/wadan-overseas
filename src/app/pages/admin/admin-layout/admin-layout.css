@@ -1,0 +1,119 @@
+.admin-shell {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 12%, rgba(14, 168, 190, 0.07), transparent 34%),
+    radial-gradient(circle at 88% 16%, rgba(239, 12, 67, 0.08), transparent 36%),
+    #f4f7fd;
+}
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  padding: 20px 14px;
+  background: linear-gradient(180deg, #0f2a58 0%, #132f63 42%, #1b4c8d 100%);
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.admin-sidebar h2 {
+  margin: 0 0 10px;
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+
+.admin-sidebar a {
+  color: #dce8ff;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-sidebar a.active,
+.admin-sidebar a:hover {
+  background: linear-gradient(120deg, #ef0c43 0%, #c70031 100%);
+  color: #ffffff;
+}
+
+.admin-main {
+  grid-column: 2;
+  min-height: 100vh;
+}
+
+.admin-header {
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #e2eaf6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 20;
+}
+
+.admin-header h1 {
+  margin: 0;
+  color: #17396f;
+  font-size: 1.25rem;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.admin-header button {
+  border: 0;
+  background: #c70031;
+  color: #ffffff;
+  border-radius: 8px;
+  height: 38px;
+  padding: 0 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-content {
+  padding: 94px 24px 24px;
+}
+
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    position: static;
+    width: auto;
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-main {
+    grid-column: 1;
+  }
+
+  .admin-header {
+    position: static;
+    left: auto;
+  }
+
+  .admin-content {
+    padding-top: 24px;
+  }
+}

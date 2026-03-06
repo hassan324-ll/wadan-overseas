@@ -1,0 +1,72 @@
+<section class="edit-card">
+  <h2>Edit About Page</h2>
+  <p>Manage full About page section content.</p>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <label>
+      Hero Title
+      <input type="text" formControlName="heroTitle" />
+    </label>
+    <label>
+      Hero Subtitle
+      <input type="text" formControlName="heroSubtitle" />
+    </label>
+    <label>
+      Who We Are Title
+      <input type="text" formControlName="whoTitle" />
+    </label>
+    <label>
+      Who We Are Paragraph 1
+      <textarea rows="4" formControlName="whoParagraph1"></textarea>
+    </label>
+    <label>
+      Who We Are Paragraph 2
+      <textarea rows="4" formControlName="whoParagraph2"></textarea>
+    </label>
+    <label>
+      Who We Are Paragraph 3
+      <textarea rows="4" formControlName="whoParagraph3"></textarea>
+    </label>
+    <label>
+      Countries Title
+      <input type="text" formControlName="countriesTitle" />
+    </label>
+    <label>
+      Countries Subtitle
+      <input type="text" formControlName="countriesSubtitle" />
+    </label>
+    <label>
+      Team Title
+      <input type="text" formControlName="teamTitle" />
+    </label>
+    <label>
+      Team Subtitle
+      <input type="text" formControlName="teamSubtitle" />
+    </label>
+
+    <h3>Our Dedicated Team</h3>
+    <div formArrayName="teamMembers">
+      <section class="team-member" *ngFor="let memberControl of teamMembers.controls; let i = index" [formGroupName]="i">
+        <h4>Member {{ i + 1 }}</h4>
+        <label>
+          Name
+          <input type="text" formControlName="name" />
+        </label>
+        <label>
+          Role
+          <input type="text" formControlName="role" />
+        </label>
+        <label>
+          WhatsApp Link
+          <input type="text" formControlName="whatsappUrl" placeholder="https://wa.me/923001234567" />
+        </label>
+      </section>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">{{ loading ? 'Saving...' : 'Save' }}</button>
+    </div>
+  </form>
+
+  <p class="msg" *ngIf="message">{{ message }}</p>
+</section>

@@ -1,0 +1,159 @@
+<section class="editor-toolbar">
+  <div>
+    <h2><i class="fa-solid fa-pen-ruler"></i> Home Page Designer</h2>
+    <p>Click the edit icon on any section to update title, text, buttons, and images.</p>
+  </div>
+</section>
+
+<section class="home-preview">
+  <article class="preview-block hero-block" [style.background-image]="'linear-gradient(100deg, rgba(248, 248, 250, 0.95) 0%, rgba(248, 248, 250, 0.87) 48%, rgba(248, 248, 250, 0.94) 100%), url(' + (homeSections.hero.imageUrl || '/sliderimg2.avif') + ')'">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('hero')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <div class="hero-grid">
+      <div class="hero-image" [style.background-image]="'url(' + (homeSections.hero.secondaryImageUrl || '/travel.png') + ')'"></div>
+      <div class="hero-text">
+        <h3>{{ homeSections.hero.title }}</h3>
+        <h4>{{ homeSections.hero.subtitle }}</h4>
+        <p>{{ homeSections.hero.description }}</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="preview-block">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('services')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-briefcase"></i> {{ homeSections.services.title }}</h3>
+    <h4>{{ homeSections.services.subtitle }}</h4>
+    <p>{{ homeSections.services.description }}</p>
+    <ul class="mini-list">
+      <li *ngFor="let item of homeSections.services.items">{{ item }}</li>
+    </ul>
+  </article>
+
+  <article class="preview-block">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('countries')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-earth-asia"></i> {{ homeSections.countries.title }}</h3>
+    <h4>{{ homeSections.countries.subtitle }}</h4>
+    <p>{{ homeSections.countries.description }}</p>
+    <ul class="mini-list">
+      <li *ngFor="let item of homeSections.countries.items">{{ item }}</li>
+    </ul>
+  </article>
+
+  <article class="preview-block dark">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('whyChoose')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-shield-heart"></i> {{ homeSections.whyChoose.title }}</h3>
+    <h4>{{ homeSections.whyChoose.subtitle }}</h4>
+    <p>{{ homeSections.whyChoose.description }}</p>
+    <ul class="mini-list">
+      <li *ngFor="let item of homeSections.whyChoose.items">{{ item }}</li>
+    </ul>
+  </article>
+
+  <article class="preview-block">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('howItWorks')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-list-check"></i> {{ homeSections.howItWorks.title }}</h3>
+    <h4>{{ homeSections.howItWorks.subtitle }}</h4>
+    <p>{{ homeSections.howItWorks.description }}</p>
+    <ul class="mini-list">
+      <li *ngFor="let item of homeSections.howItWorks.items">{{ item }}</li>
+    </ul>
+  </article>
+
+  <article class="preview-block">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('testimonials')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-star"></i> {{ homeSections.testimonials.title }}</h3>
+    <h4>{{ homeSections.testimonials.subtitle }}</h4>
+    <p>{{ homeSections.testimonials.description }}</p>
+  </article>
+
+  <article class="preview-block cta">
+    <button class="edit-icon" type="button" (click)="openSectionEditor('finalCta')">
+      <i class="fa-solid fa-pen"></i>
+    </button>
+    <h3><i class="fa-solid fa-bullhorn"></i> {{ homeSections.finalCta.title }}</h3>
+    <h4>{{ homeSections.finalCta.subtitle }}</h4>
+    <p>{{ homeSections.finalCta.description }}</p>
+    <div class="cta-buttons">
+      <span>{{ homeSections.finalCta.primaryButtonText }}</span>
+      <span>{{ homeSections.finalCta.secondaryButtonText }}</span>
+    </div>
+    <small>{{ homeSections.finalCta.trustText }}</small>
+  </article>
+</section>
+
+<aside class="editor-drawer" [class.open]="editorOpen">
+  <div class="editor-drawer__head">
+    <h3>Edit {{ getSectionLabel(selectedSectionKey) }}</h3>
+    <button type="button" (click)="closeEditor()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <form [formGroup]="sectionForm" (ngSubmit)="saveSection()">
+    <label>
+      Title
+      <input type="text" formControlName="title" />
+    </label>
+    <label>
+      Subtitle
+      <input type="text" formControlName="subtitle" />
+    </label>
+    <label>
+      Description
+      <textarea rows="4" formControlName="description"></textarea>
+    </label>
+    <label>
+      Section Items (one per line)
+      <textarea rows="5" formControlName="itemsText"></textarea>
+    </label>
+
+    <label>
+      Main Image URL
+      <input type="text" formControlName="imageUrl" />
+    </label>
+    <label class="upload">
+      Upload Main Image
+      <input type="file" accept="image/*" (change)="uploadImage($event, 'imageUrl')" />
+    </label>
+
+    <label>
+      Secondary Image URL
+      <input type="text" formControlName="secondaryImageUrl" />
+    </label>
+    <label class="upload">
+      Upload Secondary Image
+      <input type="file" accept="image/*" (change)="uploadImage($event, 'secondaryImageUrl')" />
+    </label>
+
+    <label>
+      Primary Button Text
+      <input type="text" formControlName="primaryButtonText" />
+    </label>
+    <label>
+      Secondary Button Text
+      <input type="text" formControlName="secondaryButtonText" />
+    </label>
+    <label>
+      Trust Line
+      <input type="text" formControlName="trustText" />
+    </label>
+
+    <div class="actions">
+      <button type="submit" [disabled]="loading">
+        <i class="fa-solid fa-floppy-disk"></i>
+        {{ loading ? 'Saving...' : 'Save Section' }}
+      </button>
+    </div>
+  </form>
+</aside>
+
+<p class="msg" *ngIf="message">{{ message }}</p>
