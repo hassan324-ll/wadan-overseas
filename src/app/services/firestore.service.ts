@@ -1,7 +1,7 @@
 import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
 import { Firestore, docData } from '@angular/fire/firestore';
 import { doc, getDocFromServer, setDoc } from 'firebase/firestore';
-import { Observable, firstValueFrom } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 export type HomePageContent = {
@@ -669,14 +669,14 @@ export class FirestoreService {
 
   async addNewsItem(payload: Omit<NewsArticle, 'id' | 'publishedAt'>): Promise<void> {
     const newsRef = doc(this.firestore, 'pages/news_page');
-    const currentItems = await firstValueFrom(this.getNewsItems());
+    const currentItems = await this.getNewsItemsFromServer();
     const nextItems = [
       {
         id: this.createNewsId(),
         ...payload,
         publishedAt: new Date().toISOString(),
       },
-      ...currentItems.filter((item) => item.slug !== payload.slug && !this.isDefaultNewsItem(item)),
+      ...currentItems,
     ];
 
     await setDoc(newsRef, { items: nextItems }, { merge: true });
@@ -688,7 +688,7 @@ export class FirestoreService {
     payload: Omit<NewsArticle, 'id' | 'publishedAt'>
   ): Promise<void> {
     const newsRef = doc(this.firestore, 'pages/news_page');
-    const currentItems = await firstValueFrom(this.getNewsItems());
+    const currentItems = await this.getNewsItemsFromServer();
     const existing = currentItems.find((item) => item.id === newsId);
 
     if (!existing) {
@@ -711,11 +711,21 @@ export class FirestoreService {
 
   async deleteNewsItem(newsId: string): Promise<void> {
     const newsRef = doc(this.firestore, 'pages/news_page');
-    const currentItems = await firstValueFrom(this.getNewsItems());
+    const currentItems = await this.getNewsItemsFromServer();
     const nextItems = currentItems.filter((item) => item.id !== newsId);
 
     await setDoc(newsRef, { items: nextItems }, { merge: true });
     await getDocFromServer(newsRef);
+  }
+
+  private async getNewsItemsFromServer(): Promise<NewsArticle[]> {
+    const newsRef = doc(this.firestore, 'pages/news_page');
+    const snapshot = await getDocFromServer(newsRef);
+    const payload = snapshot.data() as { items?: NewsArticle[] } | undefined;
+
+    return (payload?.items ?? [])
+      .filter((item) => !this.isDefaultNewsItem(item))
+      .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
   }
 
   private createNewsId(): string {
