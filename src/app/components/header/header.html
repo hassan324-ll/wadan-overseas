@@ -24,13 +24,13 @@
 
   <div class="main-nav">
     <div class="container nav-content">
-      <a class="brand" href="/" aria-label="Alsaadah Home">
+      <a class="brand" routerLink="/" aria-label="WADAN Home" (click)="closeMenu()">
         <img
           class="brand-logo"
           src="/logo-swoosh.png"
           width="360"
           height="240"
-          alt="Alsaadah Travel Partner logo"
+          alt="WADAN Travel Partner logo"
         />
       </a>
 
@@ -45,10 +45,11 @@
       </button>
 
       <nav class="nav-links" [class.open]="menuOpen" aria-label="Main navigation">
-        <a class="active" href="/" (click)="closeMenu()">HOME</a>
-        <a href="/about-us" (click)="closeMenu()">ABOUT US</a>
-        <a href="/services" (click)="closeMenu()">SERVICES</a>
-        <a href="/contact-us" (click)="closeMenu()">CONTACT US</a>
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">HOME</a>
+        <a routerLink="/about-us" routerLinkActive="active" (click)="closeMenu()">ABOUT US</a>
+        <a routerLink="/services" routerLinkActive="active" (click)="closeMenu()">SERVICES</a>
+        <a routerLink="/news" routerLinkActive="active" (click)="closeMenu()">NEWS</a>
+        <a routerLink="/contact-us" routerLinkActive="active" (click)="closeMenu()">CONTACT US</a>
       </nav>
     </div>
   </div>

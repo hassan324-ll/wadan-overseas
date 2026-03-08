@@ -1,0 +1,90 @@
+<ng-container *ngIf="safeNewsVm$ | async as newsVm">
+  <section class="news-hero animate-fade-up is-visible" aria-label="WADAN news">
+    <div class="news-hero__overlay"></div>
+
+    <div class="news-hero__content">
+      <span class="eyebrow animate-pop is-visible">Agency Newsroom</span>
+      <h1 class="animate-fade-up is-visible">Latest updates from WADAN travel and recruitment services.</h1>
+      <p class="animate-fade-up animate-delay-2 is-visible">
+        Announcements, upcoming hiring activity, travel notices, and service updates your clients can see immediately.
+      </p>
+    </div>
+  </section>
+
+  <section class="news-featured" aria-label="Featured news" *ngIf="newsVm.featured; else emptyNewsState">
+    <div class="news-shell">
+      <article
+        class="featured-story animate-fade-up"
+        [style.background-image]="'linear-gradient(135deg, rgba(8, 26, 62, 0.88) 0%, rgba(12, 55, 112, 0.58) 100%), url(' + newsVm.featured.imageUrl + ')'"
+      >
+        <div class="featured-story__meta">
+          <span class="story-tag">{{ newsVm.featured.category }}</span>
+          <span class="story-date">{{ formatPublishedDate(newsVm.featured.publishedAt) }}</span>
+        </div>
+
+        <div class="featured-story__body">
+          <h2>{{ newsVm.featured.title }}</h2>
+          <p>{{ newsVm.featured.excerpt }}</p>
+          <a [routerLink]="newsVm.featured.ctaLink">{{ newsVm.featured.ctaLabel }}</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="news-grid" aria-label="Recent news articles">
+    <div class="news-shell">
+      <div class="news-grid__head animate-fade-up">
+        <h2>Recent Updates</h2>
+        <p>Post new announcements from the admin panel and they will appear here automatically.</p>
+      </div>
+
+      <div class="news-grid__cards">
+        <article
+          class="news-card animate-fade-up"
+          *ngFor="let item of newsVm.secondary; let i = index"
+          [ngClass]="'animate-delay-' + ((i % 3) + 1)"
+        >
+          <div class="news-card__image" [style.background-image]="'url(' + item.imageUrl + ')'">
+            <span class="story-tag">{{ item.category }}</span>
+          </div>
+
+          <div class="news-card__content">
+            <span class="story-date">{{ formatPublishedDate(item.publishedAt) }}</span>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.excerpt }}</p>
+            <div class="news-card__footer">
+              <a [routerLink]="item.ctaLink">{{ item.ctaLabel }}</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="news-cta animate-pop" aria-label="Submit your inquiry">
+    <div class="news-shell">
+      <div class="news-cta__panel">
+        <div>
+          <span class="eyebrow">Need details?</span>
+          <h2>Ask our team about any hiring or travel update.</h2>
+          <p>Use the contact page if you want to confirm availability, document requirements, or upcoming departures.</p>
+        </div>
+
+        <a routerLink="/contact-us">Contact WADAN</a>
+      </div>
+    </div>
+  </section>
+
+  <ng-template #emptyNewsState>
+    <section class="news-empty" aria-label="No news available">
+      <div class="news-shell">
+        <div class="news-empty__panel">
+          <span class="eyebrow">No News Yet</span>
+          <h2>No news has been published yet.</h2>
+          <p>Admins can add the first news item from the dashboard, and it will appear here immediately.</p>
+          <a routerLink="/contact-us">Contact WADAN</a>
+        </div>
+      </div>
+    </section>
+  </ng-template>
+</ng-container>

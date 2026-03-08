@@ -2,14 +2,12 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
-import { CustomSections } from '../../components/custom-sections/custom-sections';
-import { CustomSection, FirestoreService } from '../../services/firestore.service';
+import { FirestoreService } from '../../services/firestore.service';
 
 @Component({
   selector: 'app-services',
   standalone: true,
-  imports: [CommonModule, CustomSections],
+  imports: [CommonModule],
   templateUrl: './services.html',
   styleUrl: './services.css',
 })
@@ -18,12 +16,7 @@ export class Services implements AfterViewInit, OnDestroy {
   revealObserver: IntersectionObserver | null = null;
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
   readonly servicesContent$ = this.firestoreService.getServicesPage().pipe(
-    map((data) => data ?? this.firestoreService.getDefaultServicesPage()),
     catchError(() => of(this.firestoreService.getDefaultServicesPage()))
-  );
-  readonly customSections$ = this.firestoreService.getCustomSections().pipe(
-    map((sections) => sections.filter((section) => section.targetPage === 'services')),
-    catchError(() => of([] as CustomSection[]))
   );
 
   ngAfterViewInit(): void {

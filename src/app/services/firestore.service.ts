@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import { collectionData, docData } from 'rxfire/firestore';
-import { addDoc, collection, doc, getDocFromServer, setDoc } from 'firebase/firestore';
-import { Observable } from 'rxjs';
+import { EnvironmentInjector, Injectable, inject, runInInjectionContext } from '@angular/core';
+import { Firestore, docData } from '@angular/fire/firestore';
+import { doc, getDocFromServer, setDoc } from 'firebase/firestore';
+import { Observable, firstValueFrom } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 export type HomePageContent = {
   title: string;
@@ -41,46 +41,6 @@ export type HomeSectionsContent = {
   howItWorks: HomeSectionItem;
   testimonials: HomeSectionItem;
   finalCta: HomeSectionItem;
-};
-
-export type CustomSection = {
-  id?: string;
-  key: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  sectionType?: 'banner' | 'cards';
-  targetPage?: 'home' | 'about-us' | 'services' | 'contact-us';
-  homePlacement?:
-    | 'top'
-    | 'after-hero'
-    | 'after-services'
-    | 'after-countries'
-    | 'after-why-choose'
-    | 'after-how-it-works'
-    | 'after-testimonials'
-    | 'after-final-cta'
-    | 'bottom';
-  backgroundImageUrl?: string;
-  heading1?: string;
-  heading2?: string;
-  paragraph?: string;
-  buttonText?: string;
-  buttonLink?: string;
-  buttonIcon?: string;
-  cardsPerRow?: 3 | 4;
-  cards?: CustomSectionCard[];
-  createdAt: string;
-};
-
-export type CustomSectionCard = {
-  title: string;
-  subtitle?: string;
-  description: string;
-  icon?: string;
-  buttonText?: string;
-  buttonLink?: string;
-  backgroundImageUrl?: string;
 };
 
 export type AboutPageContent = {
@@ -144,10 +104,26 @@ export type CountryInfoPageContent = {
   countries: CountryInfoItem[];
 };
 
+export type NewsArticle = {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  content: string;
+  imageUrl: string;
+  ctaLabel: string;
+  ctaLink: string;
+  isFeatured: boolean;
+  publishedAt: string;
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class FirestoreService {
+  private readonly injector = inject(EnvironmentInjector);
+
   constructor(private readonly firestore: Firestore) {}
 
   // Required API for pages/home document.
@@ -162,7 +138,13 @@ export class FirestoreService {
 
   getHomePage(): Observable<HomePageContent> {
     const homeRef = doc(this.firestore, 'pages/home');
-    return docData(homeRef) as Observable<HomePageContent>;
+    const defaults = this.getDefaultPage('home') as HomePageContent;
+    return runInInjectionContext(this.injector, () =>
+      docData(homeRef).pipe(
+        map((data) => ({ ...defaults, ...(data as Partial<HomePageContent> | undefined) })),
+        startWith(defaults)
+      )
+    ) as Observable<HomePageContent>;
   }
 
   updateHomePage(payload: Partial<HomePageContent>): Promise<void> {
@@ -213,7 +195,13 @@ export class FirestoreService {
 
   getPage(documentId: 'home' | 'about' | 'contact'): Observable<SimplePageContent> {
     const pageRef = doc(this.firestore, `pages/${documentId}`);
-    return docData(pageRef) as Observable<SimplePageContent>;
+    const defaults = this.getDefaultPage(documentId);
+    return runInInjectionContext(this.injector, () =>
+      docData(pageRef).pipe(
+        map((data) => ({ ...defaults, ...(data as Partial<SimplePageContent> | undefined) })),
+        startWith(defaults)
+      )
+    ) as Observable<SimplePageContent>;
   }
 
   updatePage(
@@ -252,7 +240,13 @@ export class FirestoreService {
     documentId: 'service1' | 'service2' | 'service3'
   ): Observable<ServiceContent> {
     const serviceRef = doc(this.firestore, `services/${documentId}`);
-    return docData(serviceRef) as Observable<ServiceContent>;
+    const defaults = this.getDefaultService(documentId);
+    return runInInjectionContext(this.injector, () =>
+      docData(serviceRef).pipe(
+        map((data) => ({ ...defaults, ...(data as Partial<ServiceContent> | undefined) })),
+        startWith(defaults)
+      )
+    ) as Observable<ServiceContent>;
   }
 
   updateService(
@@ -284,55 +278,6 @@ export class FirestoreService {
     };
   }
 
-  getCustomSections(): Observable<CustomSection[]> {
-    const sectionsRef = collection(this.firestore, 'sections');
-    return collectionData(sectionsRef, { idField: 'id' }) as Observable<CustomSection[]>;
-  }
-
-  addCustomSection(payload: {
-    key: string;
-    title: string;
-    subtitle: string;
-    description: string;
-    sectionType?: 'banner' | 'cards';
-    targetPage?: 'home' | 'about-us' | 'services' | 'contact-us';
-    homePlacement?:
-      | 'top'
-      | 'after-hero'
-      | 'after-services'
-      | 'after-countries'
-      | 'after-why-choose'
-      | 'after-how-it-works'
-      | 'after-testimonials'
-      | 'after-final-cta'
-      | 'bottom';
-    backgroundImageUrl?: string;
-    heading1?: string;
-    heading2?: string;
-    paragraph?: string;
-    buttonText?: string;
-    buttonLink?: string;
-    buttonIcon?: string;
-    cardsPerRow?: 3 | 4;
-    cards?: CustomSectionCard[];
-  }): Promise<void> {
-    const sectionsRef = collection(this.firestore, 'sections');
-    return addDoc(sectionsRef, {
-      ...payload,
-      createdAt: new Date().toISOString(),
-    }).then(() => void 0);
-  }
-
-  updateCustomSection(
-    sectionId: string,
-    payload: Partial<Pick<CustomSection, 'title' | 'subtitle' | 'description'>>
-  ): Promise<void> {
-    const sectionRef = doc(this.firestore, `sections/${sectionId}`);
-    return setDoc(sectionRef, payload, { merge: true }).then(() =>
-      getDocFromServer(sectionRef).then(() => void 0)
-    );
-  }
-
   createHomeSections(): Promise<void> {
     const sectionRef = doc(this.firestore, 'pages/home_sections');
     return setDoc(sectionRef, this.getDefaultHomeSections());
@@ -340,7 +285,13 @@ export class FirestoreService {
 
   getHomeSections(): Observable<HomeSectionsContent> {
     const sectionRef = doc(this.firestore, 'pages/home_sections');
-    return docData(sectionRef) as Observable<HomeSectionsContent>;
+    const defaults = this.getDefaultHomeSections();
+    return runInInjectionContext(this.injector, () =>
+      docData(sectionRef).pipe(
+        map((data) => ({ ...defaults, ...(data as Partial<HomeSectionsContent> | undefined) })),
+        startWith(defaults)
+      )
+    ) as Observable<HomeSectionsContent>;
   }
 
   async getHomeSectionsFromServer(): Promise<Partial<HomeSectionsContent>> {
@@ -434,7 +385,20 @@ export class FirestoreService {
   }
 
   getAboutPage(): Observable<AboutPageContent> {
-    return docData(doc(this.firestore, 'pages/about_page')) as Observable<AboutPageContent>;
+    const defaults = this.getDefaultAboutPage();
+    return runInInjectionContext(this.injector, () =>
+      docData(doc(this.firestore, 'pages/about_page')).pipe(
+        map((data) => {
+          const payload = data as Partial<AboutPageContent> | undefined;
+          return {
+            ...defaults,
+            ...payload,
+            teamMembers: payload?.teamMembers?.length ? payload.teamMembers : defaults.teamMembers,
+          };
+        }),
+        startWith(defaults)
+      )
+    ) as Observable<AboutPageContent>;
   }
 
   updateAboutPage(payload: Partial<AboutPageContent>): Promise<void> {
@@ -487,7 +451,20 @@ export class FirestoreService {
   }
 
   getServicesPage(): Observable<ServicesPageContent> {
-    return docData(doc(this.firestore, 'pages/services_page')) as Observable<ServicesPageContent>;
+    const defaults = this.getDefaultServicesPage();
+    return runInInjectionContext(this.injector, () =>
+      docData(doc(this.firestore, 'pages/services_page')).pipe(
+        map((data) => {
+          const payload = data as Partial<ServicesPageContent> | undefined;
+          return {
+            ...defaults,
+            ...payload,
+            cards: payload?.cards?.length ? payload.cards : defaults.cards,
+          };
+        }),
+        startWith(defaults)
+      )
+    ) as Observable<ServicesPageContent>;
   }
 
   updateServicesPage(payload: Partial<ServicesPageContent>): Promise<void> {
@@ -536,7 +513,13 @@ export class FirestoreService {
   }
 
   getContactPage(): Observable<ContactPageContent> {
-    return docData(doc(this.firestore, 'pages/contact_page')) as Observable<ContactPageContent>;
+    const defaults = this.getDefaultContactPage();
+    return runInInjectionContext(this.injector, () =>
+      docData(doc(this.firestore, 'pages/contact_page')).pipe(
+        map((data) => ({ ...defaults, ...(data as Partial<ContactPageContent> | undefined) })),
+        startWith(defaults)
+      )
+    ) as Observable<ContactPageContent>;
   }
 
   updateContactPage(payload: Partial<ContactPageContent>): Promise<void> {
@@ -562,7 +545,20 @@ export class FirestoreService {
   }
 
   getCountryInfoPage(): Observable<CountryInfoPageContent> {
-    return docData(doc(this.firestore, 'pages/country_info')) as Observable<CountryInfoPageContent>;
+    const defaults = this.getDefaultCountryInfoPage();
+    return runInInjectionContext(this.injector, () =>
+      docData(doc(this.firestore, 'pages/country_info')).pipe(
+        map((data) => {
+          const payload = data as Partial<CountryInfoPageContent> | undefined;
+          return {
+            ...defaults,
+            ...payload,
+            countries: payload?.countries?.length ? payload.countries : defaults.countries,
+          };
+        }),
+        startWith(defaults)
+      )
+    ) as Observable<CountryInfoPageContent>;
   }
 
   updateCountryInfoPage(payload: Partial<CountryInfoPageContent>): Promise<void> {
@@ -655,5 +651,78 @@ export class FirestoreService {
         },
       ],
     };
+  }
+
+  getNewsItems(): Observable<NewsArticle[]> {
+    const newsRef = doc(this.firestore, 'pages/news_page');
+    return runInInjectionContext(this.injector, () =>
+      docData(newsRef).pipe(
+        map((data) => {
+          const payload = data as { items?: NewsArticle[] } | undefined;
+          const items = (payload?.items ?? []).filter((item) => !this.isDefaultNewsItem(item));
+          return [...items].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+        }),
+        startWith([])
+      )
+    ) as Observable<NewsArticle[]>;
+  }
+
+  async addNewsItem(payload: Omit<NewsArticle, 'id' | 'publishedAt'>): Promise<void> {
+    const newsRef = doc(this.firestore, 'pages/news_page');
+    const currentItems = await firstValueFrom(this.getNewsItems());
+    const nextItems = [
+      {
+        id: this.createNewsId(),
+        ...payload,
+        publishedAt: new Date().toISOString(),
+      },
+      ...currentItems.filter((item) => item.slug !== payload.slug && !this.isDefaultNewsItem(item)),
+    ];
+
+    await setDoc(newsRef, { items: nextItems }, { merge: true });
+    await getDocFromServer(newsRef);
+  }
+
+  async updateNewsItem(
+    newsId: string,
+    payload: Omit<NewsArticle, 'id' | 'publishedAt'>
+  ): Promise<void> {
+    const newsRef = doc(this.firestore, 'pages/news_page');
+    const currentItems = await firstValueFrom(this.getNewsItems());
+    const existing = currentItems.find((item) => item.id === newsId);
+
+    if (!existing) {
+      throw new Error('News item not found.');
+    }
+
+    const nextItems = currentItems.map((item) =>
+      item.id === newsId
+        ? {
+            id: item.id,
+            publishedAt: item.publishedAt,
+            ...payload,
+          }
+        : item
+    );
+
+    await setDoc(newsRef, { items: nextItems }, { merge: true });
+    await getDocFromServer(newsRef);
+  }
+
+  async deleteNewsItem(newsId: string): Promise<void> {
+    const newsRef = doc(this.firestore, 'pages/news_page');
+    const currentItems = await firstValueFrom(this.getNewsItems());
+    const nextItems = currentItems.filter((item) => item.id !== newsId);
+
+    await setDoc(newsRef, { items: nextItems }, { merge: true });
+    await getDocFromServer(newsRef);
+  }
+
+  private createNewsId(): string {
+    return `news-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  private isDefaultNewsItem(item: Pick<NewsArticle, 'id'>): boolean {
+    return item.id.startsWith('news-default-');
   }
 }

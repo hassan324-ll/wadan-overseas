@@ -2,16 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule, NgForm } from '@angular/forms';
-import { of, Subscription } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { map } from 'rxjs/operators';
-import { CustomSections } from '../../components/custom-sections/custom-sections';
-import { CustomSection, FirestoreService } from '../../services/firestore.service';
+import { Subscription } from 'rxjs';
+import { FirestoreService } from '../../services/firestore.service';
 
 @Component({
   selector: 'app-contact-us',
   standalone: true,
-  imports: [CommonModule, FormsModule, CustomSections],
+  imports: [CommonModule, FormsModule],
   templateUrl: './contact-us.html',
   styleUrl: './contact-us.css',
 })
@@ -23,10 +20,6 @@ export class ContactUs implements OnInit, OnDestroy {
   successTimer: ReturnType<typeof setTimeout> | null = null;
   dataSub: Subscription | null = null;
   contactContent = this.firestoreService.getDefaultContactPage();
-  readonly customSections$ = this.firestoreService.getCustomSections().pipe(
-    map((sections) => sections.filter((section) => section.targetPage === 'contact-us')),
-    catchError(() => of([] as CustomSection[]))
-  );
   safeMapUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
     'https://www.google.com/maps?q=Muqam+Chowk+Mardan+Pakistan&output=embed'
   );

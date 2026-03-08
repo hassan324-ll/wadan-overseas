@@ -1,28 +1,43 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { FirestoreService } from '../../services/firestore.service';
+import { catchError, map } from 'rxjs/operators';
+import { FirestoreService, NewsArticle } from '../../services/firestore.service';
+
+type NewsViewModel = {
+  featured: NewsArticle | null;
+  secondary: NewsArticle[];
+};
 
 @Component({
-  selector: 'app-about-us',
+  selector: 'app-news',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './about-us.html',
-  styleUrl: './about-us.css',
+  imports: [CommonModule, RouterLink],
+  templateUrl: './news.html',
+  styleUrl: './news.css',
 })
-export class AboutUs implements AfterViewInit, OnDestroy {
+export class News implements AfterViewInit, OnDestroy {
   private readonly firestoreService = inject(FirestoreService);
+
   revealObserver: IntersectionObserver | null = null;
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
-  readonly aboutContent$ = this.firestoreService.getAboutPage().pipe(
-    catchError(() => of(this.firestoreService.getDefaultAboutPage()))
+
+  readonly newsVm$ = this.firestoreService.getNewsItems().pipe(
+    map((items) => {
+      const featured = items[0] ?? null;
+      return {
+        featured,
+        secondary: featured ? items.filter((item) => item !== featured) : [],
+      } satisfies NewsViewModel;
+    }),
+    catchError(() => of({ featured: null, secondary: [] as NewsArticle[] }))
   );
 
-  ngAfterViewInit(): void {
-    // Fail-safe: never keep content hidden if observer timing fails on any device.
-    this.revealElementsImmediately();
+  readonly safeNewsVm$ = this.newsVm$;
 
+  ngAfterViewInit(): void {
+    this.revealElementsImmediately();
     this.initializeRevealAnimations();
   }
 
@@ -36,6 +51,14 @@ export class AboutUs implements AfterViewInit, OnDestroy {
       clearTimeout(this.revealFallbackTimer);
       this.revealFallbackTimer = null;
     }
+  }
+
+  formatPublishedDate(publishedAt: string): string {
+    return new Intl.DateTimeFormat('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(publishedAt));
   }
 
   private initializeRevealAnimations(): void {
@@ -72,6 +95,4 @@ export class AboutUs implements AfterViewInit, OnDestroy {
     const elements = document.querySelectorAll<HTMLElement>('.animate-fade-up, .animate-pop');
     elements.forEach((element) => element.classList.add('is-visible'));
   }
-
 }
-

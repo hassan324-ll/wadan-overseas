@@ -54,6 +54,30 @@
   line-height: 1.55;
 }
 
+.action-card {
+  background:
+    radial-gradient(circle at top right, rgba(14, 168, 190, 0.08), transparent 36%),
+    linear-gradient(180deg, #ffffff 0%, #f6faff 100%);
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: #c70031;
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.action-link:hover {
+  background: #a9002a;
+}
+
 @media (max-width: 900px) {
   .info-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

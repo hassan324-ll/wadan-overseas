@@ -1,7 +1,5 @@
 <app-feature-carousel></app-feature-carousel>
 <ng-container *ngIf="homeSections$ | async as homeSections">
-<ng-container *ngIf="customSections$ | async as customSections">
-<app-custom-sections [sections]="customSections" placement="top"></app-custom-sections>
 
 <section
   class="travel-highlight animate-fade-up is-visible"
@@ -31,7 +29,6 @@
     </div>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-hero"></app-custom-sections>
 
 <section class="services-preview animate-fade-up" aria-label="Our key services preview">
   <div class="services-preview__container">
@@ -62,7 +59,6 @@
     <a class="services-preview__btn animate-pop animate-delay-2" href="/services">View All Services</a>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-services"></app-custom-sections>
 
 <section class="countries-serve animate-fade-up" aria-label="Countries we serve">
   <div class="countries-serve__container">
@@ -123,7 +119,6 @@
     </div>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-countries"></app-custom-sections>
 
 <section class="why-choose animate-fade-up" aria-label="Why choose us">
   <div class="why-choose__container">
@@ -140,7 +135,6 @@
     </div>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-why-choose"></app-custom-sections>
 
 <section class="how-it-works animate-fade-up" aria-label="How it works">
   <div class="how-it-works__container">
@@ -159,7 +153,6 @@
     </ol>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-how-it-works"></app-custom-sections>
 
 <section class="testimonial-slider animate-fade-up" aria-label="Client testimonials">
   <div class="testimonial-slider__container">
@@ -208,7 +201,6 @@
     </div>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-testimonials"></app-custom-sections>
 
 <section class="final-cta animate-fade-up" aria-label="Final call to action">
   <div class="final-cta__container">
@@ -223,7 +215,4 @@
     <span class="final-cta__trust">{{ homeSections.finalCta.trustText }}</span>
   </div>
 </section>
-<app-custom-sections [sections]="customSections" placement="after-final-cta"></app-custom-sections>
-<app-custom-sections [sections]="customSections" placement="bottom"></app-custom-sections>
-</ng-container>
 </ng-container>

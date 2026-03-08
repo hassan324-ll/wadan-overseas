@@ -1,0 +1,130 @@
+<section class="news-admin">
+  <article class="edit-card">
+    <h2><i class="fa-solid fa-newspaper"></i> {{ isEditing ? 'Edit News' : 'Add News' }}</h2>
+    <p>Create announcements for new travel packages, hiring windows, office updates, or anything new coming from the agency.</p>
+
+    <p class="status-banner" *ngIf="message" [class.status-banner--success]="messageType === 'success'" [class.status-banner--error]="messageType === 'error'">
+      {{ message }}
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        News Title
+        <input type="text" formControlName="title" placeholder="Example: New Umrah package launching this week" />
+        <small class="field-error" *ngIf="form.controls.title.touched && form.controls.title.invalid">
+          News title is required.
+        </small>
+      </label>
+
+      <label>
+        Category
+        <input type="text" formControlName="category" placeholder="Agency Update" />
+        <small class="field-error" *ngIf="form.controls.category.touched && form.controls.category.invalid">
+          Category is required.
+        </small>
+      </label>
+
+      <label>
+        Short Excerpt
+        <textarea rows="3" formControlName="excerpt" placeholder="Write a short summary for the news card."></textarea>
+        <small class="field-error" *ngIf="form.controls.excerpt.touched && form.controls.excerpt.hasError('required')">
+          Short excerpt is required.
+        </small>
+        <small class="field-error" *ngIf="form.controls.excerpt.touched && form.controls.excerpt.hasError('maxlength')">
+          Short excerpt must be 220 characters or less.
+        </small>
+      </label>
+
+      <label>
+        Full Content
+        <textarea rows="6" formControlName="content" placeholder="Write the full news content or announcement."></textarea>
+        <small class="field-error" *ngIf="form.controls.content.touched && form.controls.content.hasError('required')">
+          Full content is required.
+        </small>
+        <small class="field-error" *ngIf="form.controls.content.touched && form.controls.content.hasError('minlength')">
+          Full content must be at least 10 characters.
+        </small>
+      </label>
+
+      <label>
+        Cover Image URL
+        <input type="text" formControlName="imageUrl" placeholder="/sliderimg2.avif" />
+        <small class="field-error" *ngIf="form.controls.imageUrl.touched && form.controls.imageUrl.invalid">
+          Cover image URL is required.
+        </small>
+      </label>
+
+      <label>
+        CTA Button Label
+        <input type="text" formControlName="ctaLabel" placeholder="Contact Our Team" />
+        <small class="field-error" *ngIf="form.controls.ctaLabel.touched && form.controls.ctaLabel.invalid">
+          CTA button label is required.
+        </small>
+      </label>
+
+      <label>
+        CTA Link
+        <input type="text" formControlName="ctaLink" placeholder="/contact-us" />
+        <small class="field-error" *ngIf="form.controls.ctaLink.touched && form.controls.ctaLink.invalid">
+          CTA link is required.
+        </small>
+      </label>
+
+      <label class="checkbox-row">
+        <input type="checkbox" formControlName="isFeatured" />
+        <span>Mark as featured on the News page</span>
+      </label>
+
+      <div class="actions">
+        <button type="submit" [disabled]="loading">
+          <i class="fa-solid fa-floppy-disk"></i>
+          {{ loading ? (isEditing ? 'Updating...' : 'Publishing...') : (isEditing ? 'Update News' : 'Publish News') }}
+        </button>
+        <button type="button" class="secondary-btn" *ngIf="isEditing" (click)="cancelEdit()" [disabled]="loading">
+          <i class="fa-solid fa-ban"></i>
+          Cancel
+        </button>
+      </div>
+    </form>
+  </article>
+
+  <article class="preview-card">
+    <span class="preview-label">Live Preview</span>
+    <div class="preview-hero" [style.background-image]="'linear-gradient(140deg, rgba(8, 26, 62, 0.88) 0%, rgba(12, 55, 112, 0.6) 100%), url(' + form.controls.imageUrl.value + ')'">
+      <span class="preview-tag">{{ previewCategory }}</span>
+      <h3>{{ previewTitle }}</h3>
+      <p>{{ previewExcerpt }}</p>
+    </div>
+  </article>
+</section>
+
+<section class="existing-news">
+  <div class="existing-news__head">
+    <h3>Published News</h3>
+    <p>These are the news items currently loaded from Firestore.</p>
+  </div>
+
+  <div class="existing-news__list" *ngIf="newsItems.length; else emptyState">
+    <article class="news-row" *ngFor="let item of newsItems">
+      <div class="news-row__content">
+        <span class="preview-tag">{{ item.category }}</span>
+        <h4>{{ item.title }}</h4>
+        <span class="publish-date">Published: {{ formatPublishedDate(item.publishedAt) }}</span>
+        <p>{{ item.excerpt }}</p>
+      </div>
+      <div class="news-row__actions">
+        <button type="button" class="icon-btn" (click)="editNewsItem(item)" [disabled]="loading" aria-label="Edit news">
+          <i class="fa-solid fa-pen"></i>
+        </button>
+        <button type="button" class="icon-btn icon-btn--danger" (click)="deleteNewsItem(item)" [disabled]="loading" aria-label="Delete news">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+        <a href="/news">View Page</a>
+      </div>
+    </article>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="empty-state">No news has been published yet. The public News page will show default sample items until you add the first real post.</p>
+  </ng-template>
+</section>
