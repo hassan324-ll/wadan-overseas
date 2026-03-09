@@ -435,12 +435,12 @@ export class FirestoreService {
         {
           name: 'Shah Zaib Safi',
           role: 'CEO',
-          whatsappUrl: 'https://wa.me/923001234567',
+          whatsappUrl: 'https://wa.me/923458900004',
         },
         {
           name: 'Sajid Khan',
           role: 'Manager',
-          whatsappUrl: 'https://wa.me/923001234567',
+          whatsappUrl: 'https://wa.me/923452007001',
         },
       ],
     };
