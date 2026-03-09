@@ -1,0 +1,48 @@
+<ng-container *ngIf="articleVm$ | async as vm">
+  <ng-container *ngIf="vm.article as article; else notFound">
+    <section class="news-detail-hero">
+      <div class="news-detail-hero__backdrop" [style.background-image]="'linear-gradient(145deg, rgba(7, 18, 47, 0.88), rgba(10, 63, 135, 0.45)), url(' + article.imageUrl + ')'"></div>
+      <div class="news-detail-shell">
+        <a class="news-detail__back" routerLink="/news">Back to news</a>
+
+        <div class="news-detail-hero__content">
+          <div class="news-detail__meta">
+            <span class="story-tag">{{ article.category }}</span>
+            <span>{{ formatPublishedDate(article.publishedAt) }}</span>
+          </div>
+
+          <h1>{{ article.title }}</h1>
+          <p class="news-detail__excerpt">{{ article.excerpt }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="news-detail-body">
+      <div class="news-detail-shell news-detail-layout">
+        <article class="news-detail-story">
+          <p *ngFor="let paragraph of vm.paragraphs">{{ paragraph }}</p>
+        </article>
+
+        <aside class="news-detail-aside">
+          <div class="news-detail-card">
+            <span class="eyebrow">Need assistance?</span>
+            <h2>Talk to our team about this update.</h2>
+            <p>Get clarification on documents, availability, travel dates, or recruitment details.</p>
+            <a [routerLink]="article.ctaLink">{{ article.ctaLabel }}</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </ng-container>
+
+  <ng-template #notFound>
+    <section class="news-detail-empty">
+      <div class="news-detail-shell">
+        <span class="eyebrow">Article Not Found</span>
+        <h1>This news detail is no longer available.</h1>
+        <p>The article may have been removed or the link is outdated.</p>
+        <a routerLink="/news">Return to News</a>
+      </div>
+    </section>
+  </ng-template>
+</ng-container>

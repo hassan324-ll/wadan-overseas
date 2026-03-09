@@ -53,8 +53,26 @@ textarea {
   font: inherit;
 }
 
+input[type='file'] {
+  padding: 9px 10px;
+  background: #f8fbff;
+}
+
 textarea {
   resize: vertical;
+}
+
+.upload-field {
+  padding: 12px;
+  border: 1px dashed #bfd0ea;
+  border-radius: 12px;
+  background: #f8fbff;
+}
+
+.upload-hint {
+  color: #5d6b86;
+  font-size: 0.84rem;
+  font-weight: 600;
 }
 
 .checkbox-row {

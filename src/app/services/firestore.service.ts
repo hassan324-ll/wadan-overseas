@@ -667,6 +667,12 @@ export class FirestoreService {
     ) as Observable<NewsArticle[]>;
   }
 
+  getNewsItemBySlug(slug: string): Observable<NewsArticle | null> {
+    return this.getNewsItems().pipe(
+      map((items) => items.find((item) => item.slug === slug) ?? null)
+    );
+  }
+
   async addNewsItem(payload: Omit<NewsArticle, 'id' | 'publishedAt'>): Promise<void> {
     const newsRef = doc(this.firestore, 'pages/news_page');
     const currentItems = await this.getNewsItemsFromServer();

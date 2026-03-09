@@ -4,7 +4,7 @@
 
     <div class="news-hero__content">
       <span class="eyebrow animate-pop is-visible">Agency Newsroom</span>
-      <h1 class="animate-fade-up is-visible">Latest updates from WADAN travel and recruitment services.</h1>
+      <h1 class="animate-fade-up is-visible">Latest updates from WADAN Overseas and Employment Promoters.</h1>
       <p class="animate-fade-up animate-delay-2 is-visible">
         Announcements, upcoming hiring activity, travel notices, and service updates your clients can see immediately.
       </p>
@@ -25,7 +25,7 @@
         <div class="featured-story__body">
           <h2>{{ newsVm.featured.title }}</h2>
           <p>{{ newsVm.featured.excerpt }}</p>
-          <a [routerLink]="newsVm.featured.ctaLink">{{ newsVm.featured.ctaLabel }}</a>
+          <a [routerLink]="['/news', newsVm.featured.slug]">See full detail</a>
         </div>
       </article>
     </div>
@@ -53,7 +53,7 @@
             <h3>{{ item.title }}</h3>
             <p>{{ item.excerpt }}</p>
             <div class="news-card__footer">
-              <a [routerLink]="item.ctaLink">{{ item.ctaLabel }}</a>
+              <a [routerLink]="['/news', item.slug]">See full detail</a>
             </div>
           </div>
         </article>

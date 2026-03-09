@@ -5,6 +5,7 @@ import { AboutUs } from './pages/about-us/about-us';
 import { ContactUs } from './pages/contact-us/contact-us';
 import { CountryInfo } from './pages/country-info/country-info';
 import { News } from './pages/news/news';
+import { NewsDetail } from './pages/news-detail/news-detail';
 import { AdminLogin } from './pages/admin/admin-login/admin-login';
 import { AdminLayout } from './pages/admin/admin-layout/admin-layout';
 import { AdminDashboard } from './pages/admin/admin-dashboard/admin-dashboard';
@@ -40,6 +41,10 @@ export const routes: Routes = [
     {
         path: 'news',
         component: News
+    },
+    {
+        path: 'news/:slug',
+        component: NewsDetail
     },
     {
         path: 'countries/:slug',

@@ -8,7 +8,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { CloudinaryService } from '../../../services/cloudinary.service';
 import { FirestoreService, NewsArticle } from '../../../services/firestore.service';
 
 const trimmedRequired: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -26,20 +27,24 @@ const trimmedRequired: ValidatorFn = (control: AbstractControl): ValidationError
 export class AddNews implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly firestoreService = inject(FirestoreService);
+  private readonly cloudinaryService = inject(CloudinaryService);
 
-  loading = false;
+  saving = false;
+  deleting = false;
+  uploadingImage = false;
   message = '';
   messageType: 'success' | 'error' | '' = '';
   editingNewsId: string | null = null;
   dataSub: Subscription | null = null;
   newsItems: NewsArticle[] = [];
+  selectedImageName = '';
 
   readonly form = this.fb.nonNullable.group({
     title: ['', trimmedRequired],
     category: ['Agency Update', trimmedRequired],
     excerpt: ['', [trimmedRequired, Validators.maxLength(220)]],
     content: ['', [trimmedRequired, Validators.minLength(10)]],
-    imageUrl: ['/sliderimg2.avif', trimmedRequired],
+    imageUrl: ['', trimmedRequired],
     ctaLabel: ['Contact Our Team', trimmedRequired],
     ctaLink: ['/contact-us', trimmedRequired],
     isFeatured: [false],
@@ -74,7 +79,7 @@ export class AddNews implements OnInit, OnDestroy {
       { invalid: this.form.controls.category.invalid, label: 'Category' },
       { invalid: this.form.controls.excerpt.invalid, label: 'Short Excerpt' },
       { invalid: this.form.controls.content.invalid, label: 'Full Content' },
-      { invalid: this.form.controls.imageUrl.invalid, label: 'Cover Image URL' },
+      { invalid: this.form.controls.imageUrl.invalid, label: 'Background Image' },
       { invalid: this.form.controls.ctaLabel.invalid, label: 'CTA Button Label' },
       { invalid: this.form.controls.ctaLink.invalid, label: 'CTA Link' },
     ];
@@ -86,7 +91,18 @@ export class AddNews implements OnInit, OnDestroy {
     return this.editingNewsId !== null;
   }
 
+  get loading(): boolean {
+    return this.saving || this.deleting || this.uploadingImage;
+  }
+
   async save(): Promise<void> {
+    if (!this.form.controls.imageUrl.value.trim()) {
+      this.form.controls.imageUrl.markAsTouched();
+      this.messageType = 'error';
+      this.message = 'Upload a background image first. Publish is blocked until the image upload succeeds.';
+      return;
+    }
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.messageType = 'error';
@@ -96,7 +112,7 @@ export class AddNews implements OnInit, OnDestroy {
 
     const value = this.form.getRawValue();
 
-    this.loading = true;
+    this.saving = true;
     this.message = '';
     this.messageType = '';
     try {
@@ -134,7 +150,37 @@ export class AddNews implements OnInit, OnDestroy {
       this.message = `Save failed: ${details}`;
       console.error(error);
     } finally {
-      this.loading = false;
+      this.saving = false;
+    }
+  }
+
+  async uploadImage(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    this.uploadingImage = true;
+    this.message = '';
+    this.messageType = '';
+    try {
+      const url = await firstValueFrom(this.cloudinaryService.uploadNewsImage(file));
+      this.form.patchValue({ imageUrl: url });
+      this.selectedImageName = file.name;
+      this.messageType = 'success';
+      this.message = 'Background image uploaded. Publish the news item to save it.';
+    } catch (error: unknown) {
+      const details = error instanceof Error ? error.message : 'Unknown error';
+      this.messageType = 'error';
+      this.message =
+        details.toLowerCase().includes('upload preset')
+          ? 'Image upload failed: Cloudinary unsigned upload preset is invalid or missing. Update `newsUploadPreset` in cloudinary.service.ts to your real preset, or use a backend-signed upload.'
+          : `Image upload failed: ${details}`;
+      console.error(error);
+    } finally {
+      this.uploadingImage = false;
+      input.value = '';
     }
   }
 
@@ -142,6 +188,7 @@ export class AddNews implements OnInit, OnDestroy {
     this.editingNewsId = item.id;
     this.message = '';
     this.messageType = '';
+    this.selectedImageName = '';
     this.form.setValue({
       title: item.title,
       category: item.category,
@@ -161,7 +208,7 @@ export class AddNews implements OnInit, OnDestroy {
       return;
     }
 
-    this.loading = true;
+    this.deleting = true;
     this.message = '';
     this.messageType = '';
     try {
@@ -177,7 +224,7 @@ export class AddNews implements OnInit, OnDestroy {
       this.message = `Delete failed: ${details}`;
       console.error(error);
     } finally {
-      this.loading = false;
+      this.deleting = false;
     }
   }
 
@@ -205,12 +252,13 @@ export class AddNews implements OnInit, OnDestroy {
 
   private resetForm(): void {
     this.editingNewsId = null;
+    this.selectedImageName = '';
     this.form.setValue({
       title: '',
       category: 'Agency Update',
       excerpt: '',
       content: '',
-      imageUrl: '/sliderimg2.avif',
+      imageUrl: '',
       ctaLabel: 'Contact Our Team',
       ctaLink: '/contact-us',
       isFeatured: false,

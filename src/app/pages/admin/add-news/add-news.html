@@ -46,11 +46,14 @@
         </small>
       </label>
 
-      <label>
-        Cover Image URL
-        <input type="text" formControlName="imageUrl" placeholder="/sliderimg2.avif" />
+      <label class="upload-field">
+        Upload Background Image From PC
+        <input type="file" accept="image/*" (change)="uploadImage($event)" [disabled]="loading" />
+        <small class="upload-hint">
+          {{ selectedImageName ? ('Selected: ' + selectedImageName) : 'Choose an image to upload to Firebase Storage.' }}
+        </small>
         <small class="field-error" *ngIf="form.controls.imageUrl.touched && form.controls.imageUrl.invalid">
-          Cover image URL is required.
+          Background image upload is required.
         </small>
       </label>
 
@@ -78,7 +81,7 @@
       <div class="actions">
         <button type="submit" [disabled]="loading">
           <i class="fa-solid fa-floppy-disk"></i>
-          {{ loading ? (isEditing ? 'Updating...' : 'Publishing...') : (isEditing ? 'Update News' : 'Publish News') }}
+          {{ saving ? (isEditing ? 'Updating...' : 'Publishing...') : (isEditing ? 'Update News' : 'Publish News') }}
         </button>
         <button type="button" class="secondary-btn" *ngIf="isEditing" (click)="cancelEdit()" [disabled]="loading">
           <i class="fa-solid fa-ban"></i>
