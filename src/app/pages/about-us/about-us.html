@@ -92,7 +92,7 @@
         *ngFor="let member of aboutContent.teamMembers; let i = index"
         [ngClass]="'animate-delay-' + ((i % 4) + 1)"
       >
-        <div class="team-card__photo" [ngClass]="'team-card__photo--' + ((i % 4) + 1)"></div>
+        <div class="team-card__photo" [ngStyle]="getPhotoStyle(member)"></div>
         <h3>{{ member.name }}</h3>
         <span class="team-role">{{ member.role }}</span>
         <div class="team-social">

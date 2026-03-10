@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, inject } from '@angular/core';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { FirestoreService } from '../../services/firestore.service';
+import { catchError, map } from 'rxjs/operators';
+import { FirestoreService, type AboutPageContent, type AboutTeamMember } from '../../services/firestore.service';
 
 @Component({
   selector: 'app-about-us',
@@ -15,9 +15,14 @@ export class AboutUs implements AfterViewInit, OnDestroy {
   private readonly firestoreService = inject(FirestoreService);
   revealObserver: IntersectionObserver | null = null;
   revealFallbackTimer: ReturnType<typeof setTimeout> | null = null;
-  readonly aboutContent$ = this.firestoreService.getAboutPage().pipe(
-    catchError(() => of(this.firestoreService.getDefaultAboutPage()))
-  );
+  readonly aboutContent$ = this.firestoreService
+    .getAboutPage()
+    .pipe(
+      map((content) => this.withTeamPriority(content)),
+      catchError(() =>
+        of(this.withTeamPriority(this.firestoreService.getDefaultAboutPage()))
+      )
+    );
 
   ngAfterViewInit(): void {
     // Fail-safe: never keep content hidden if observer timing fails on any device.
@@ -73,5 +78,34 @@ export class AboutUs implements AfterViewInit, OnDestroy {
     elements.forEach((element) => element.classList.add('is-visible'));
   }
 
+  private withTeamPriority(content: AboutPageContent): AboutPageContent {
+    return {
+      ...content,
+      teamMembers: this.reorderWithLeadershipPriority(content.teamMembers ?? []),
+    };
+  }
+
+  private readonly leadershipRoles = ['CEO', 'Manager', 'Marketing Manager'];
+  private readonly leadershipRoleSet = new Set(this.leadershipRoles);
+
+  private reorderWithLeadershipPriority(members: AboutTeamMember[]): AboutTeamMember[] {
+    if (!members.length) {
+      return [];
+    }
+
+    const prioritized: AboutTeamMember[] = [];
+    for (const role of this.leadershipRoles) {
+      prioritized.push(...members.filter((member) => member.role === role));
+    }
+    const remaining = members.filter((member) => !this.leadershipRoleSet.has(member.role));
+    return [...prioritized, ...remaining];
+  }
+
+  getPhotoStyle(member: AboutTeamMember): { [key: string]: string } {
+    const url = member.photoUrl ?? '/Siddiq.jpeg';
+    return {
+      'background-image': `url('${url}')`,
+    };
+  }
 }
 

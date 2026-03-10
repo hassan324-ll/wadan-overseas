@@ -61,6 +61,7 @@ export type AboutTeamMember = {
   name: string;
   role: string;
   whatsappUrl: string;
+  photoUrl?: string;
 };
 
 export type ServiceCardContent = {
@@ -426,21 +427,25 @@ export class FirestoreService {
           name: 'Siddiq Ahmad',
           role: 'Sales Representative',
           whatsappUrl: 'https://wa.me/923001234567',
+          photoUrl: '/Siddiq.jpeg',
         },
         {
           name: 'Shah Baz',
           role: 'Marketing Manager',
           whatsappUrl: 'https://wa.me/923001234567',
+          photoUrl: '/shahbaz.jpeg',
         },
         {
           name: 'Shah Zaib Safi',
           role: 'CEO',
           whatsappUrl: 'https://wa.me/923458900004',
+          photoUrl: '/shahzaib.jpeg',
         },
         {
           name: 'Sajid Khan',
           role: 'Manager',
           whatsappUrl: 'https://wa.me/923452007001',
+          photoUrl: '/manager.jpeg',
         },
       ],
     };

@@ -427,22 +427,6 @@
   box-shadow: 0 10px 20px rgba(20, 37, 72, 0.12);
 }
 
-.team-card__photo--1 {
-  background-image: url('/Siddiq.jpeg');
-}
-
-.team-card__photo--2 {
-  background-image: url('/shahbaz.jpeg');
-}
-
-.team-card__photo--3 {
-  background-image: url('/shahzaib.jpeg');
-}
-
-.team-card__photo--4 {
-  background-image: url('/manager.jpeg');
-}
-
 .team-card h3 {
   margin: 0 0 4px;
   color: #1f3562;
