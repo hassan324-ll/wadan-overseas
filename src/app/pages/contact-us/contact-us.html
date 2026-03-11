@@ -27,10 +27,10 @@
               <i class="fa-regular fa-user" aria-hidden="true"></i>
               <input
                 id="fullName"
-                name="fullName"
+                name="full_name"
                 type="text"
                 required
-                ngModel
+                [(ngModel)]="contactFormModel.full_name"
                 placeholder="Enter your full name"
               />
             </div>
@@ -46,7 +46,7 @@
                 type="email"
                 required
                 email
-                ngModel
+                [(ngModel)]="contactFormModel.email"
                 placeholder="Enter your email"
               />
             </div>
@@ -61,7 +61,7 @@
                 name="phone"
                 type="tel"
                 required
-                ngModel
+                [(ngModel)]="contactFormModel.phone"
                 placeholder="Enter your phone number"
               />
             </div>
@@ -76,7 +76,7 @@
                 name="profession"
                 type="text"
                 required
-                ngModel
+                [(ngModel)]="contactFormModel.profession"
                 placeholder="e.g. Electrician, Driver, Welder"
               />
             </div>
@@ -91,8 +91,8 @@
               id="message"
               name="message"
               rows="5"
-              ngModel
               placeholder="Write your message"
+              [(ngModel)]="contactFormModel.message"
             ></textarea>
           </div>
         </div>
@@ -102,7 +102,7 @@
           <span>I agree to the processing of my information for consultation and follow-up.</span>
         </label>
 
-        <button type="submit" class="submit-btn">
+        <button type="submit" class="submit-btn" [disabled]="loading">
           <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
           Send Message
         </button>
